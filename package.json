@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "@angular/core": "^18.2.12",
+    "@angular/forms": "^18.2.12",
+    "@angular/router": "^18.2.12",
+    "@nestjs/common": "^10.4.8",
+    "@nestjs/jwt": "^10.2.0",
+    "@nestjs/mongoose": "^10.1.0",
+    "@types/express": "^5.0.0",
+    "axios": "^1.7.7"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.4",
+    "@types/cypress": "^1.1.6",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.9.0"
+  }
+}

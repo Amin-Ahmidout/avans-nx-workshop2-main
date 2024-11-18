@@ -1,0 +1,60 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "rootDir": ".",
+        "sourceMap": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "es2015",
+        "module": "esnext",
+        "lib": ["es2020", "dom"],
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
+        "baseUrl": ".",
+        "paths": {
+            "@avans-nx-workshop/backend/auth": [
+                "libs/backend/auth/src/index.ts"
+            ],
+            "@avans-nx-workshop/backend/dto": ["libs/backend/dto/src/index.ts"],
+            "@avans-nx-workshop/backend/features": [
+                "libs/backend/features/src/index.ts"
+            ],
+            "@avans-nx-workshop/backend/neo4j": [
+                "libs/backend/neo4j/src/index.ts"
+            ],
+            "@avans-nx-workshop/backend/user": [
+                "libs/backend/user/src/index.ts"
+            ],
+            "@avans-nx-workshop/features": [
+                "libs/frontend/features/src/index.ts"
+            ],
+            "@avans-nx-workshop/frontend/common": [
+                "libs/frontend/common/src/index.ts"
+            ],
+            "@avans-nx-workshop/frontend/ui": ["libs/frontend/ui/src/index.ts"],
+            "@avans-nx-workshop/share-a-meal/auth": [
+                "libs/share-a-meal/auth/src/index.ts"
+            ],
+            "@avans-nx-workshop/share-a-meal/common": [
+                "libs/share-a-meal/common/src/index.ts"
+            ],
+            "@avans-nx-workshop/share-a-meal/features": [
+                "libs/share-a-meal/features/src/index.ts"
+            ],
+            "@avans-nx-workshop/share-a-meal/ui": [
+                "libs/share-a-meal/ui/src/index.ts"
+            ],
+            "@avans-nx-workshop/share-a-meal/user": [
+                "libs/share-a-meal/user/src/index.ts"
+            ],
+            "@avans-nx-workshop/shared/api": ["libs/shared/api/src/index.ts"],
+            "@avans-nx-workshop/shared/util-env": [
+                "libs/shared/util-env/src/index.ts"
+            ]
+        }
+    },
+    "exclude": ["node_modules", "tmp"]
+}

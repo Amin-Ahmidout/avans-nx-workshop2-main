@@ -1,0 +1,30 @@
+<table class="table table-border table-hover">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>isActive</th>
+            <th>Photo</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users">
+            <td>{{user._id}}</td>
+            <td>
+                <a routerLink="{{user._id}}">
+                    {{user.name}}
+                </a>
+            </td>
+            <td>{{user.emailAddress}}</td>
+            <td>{{user.isActive}}</td>
+            <td>
+                <img 
+                    [src]="user.profileImgUrl" 
+                    alt="Profile picture of {{user.name}}" 
+                    class="profile-picture" height="50"
+                />
+            </td>
+        </tr>
+    </tbody>
+</table>

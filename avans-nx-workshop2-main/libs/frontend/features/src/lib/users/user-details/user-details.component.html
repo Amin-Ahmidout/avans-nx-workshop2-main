@@ -1,0 +1,19 @@
+ 
+
+<div *ngIf="userDetails; else loading">
+    <h1>User Details</h1>
+    <p><strong>Name:</strong> {{ userDetails.name }}</p>
+    <p><strong>Email:</strong> {{ userDetails.emailAddress }}</p>
+    <p><strong>Role:</strong> {{ userDetails.role }}</p>
+    <p><strong>Gender:</strong> {{ userDetails.gender }}</p>
+    <p><strong>Status:</strong> {{ userDetails.isActive ? 'Active' : 'Inactive' }}</p>
+    <img [src]="userDetails.profileImgUrl" alt="{{ userDetails.name }}'s profile" width="100">
+ 
+
+  </div>
+   <br>
+  <button class="btn btn-primary" [routerLink]="['/users', userId, 'edit']">Edit</button>
+  <ng-template #loading>
+    <p>Loading user details...</p>
+  </ng-template>
+  

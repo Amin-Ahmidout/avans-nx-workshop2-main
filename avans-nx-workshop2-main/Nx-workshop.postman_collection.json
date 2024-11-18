@@ -1,0 +1,266 @@
+{
+	"info": {
+		"_postman_id": "585b920a-7fa2-4bcb-a6d9-b01e6712e8df",
+		"name": "Nx-workshop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19718925"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "/api/auth/register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Robin Schellius\",\r\n    \"emailAddress\": \"rschellius@avans.nl\",\r\n    \"password\": \"secret\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/auth/login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"emailAddress\": \"r.schellius@server.nl\",\r\n    \"password\": \"secret\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "/api/user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/user/0",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/user/655d1d8ae26794a724fdc5b9",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"655d1d8ae26794a724fdc5b9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Norah Jones\",\r\n    \"password\": \"secret\",\r\n    \"emailAddress\": \"norahjones@server.com\",\r\n    \"isActive\": true,\r\n    \"profileImgUrl\": \"https://randomuser.me/api/portraits/women/19.jpg\",\r\n    \"role\": \"Guest\",\r\n    \"meals\": [],\r\n    \"gender\": \"Female\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"_id\": \"655d252c6c89950a76aadc07\",\r\n  \"name\": \"Norah Jones\",\r\n  \"password\": \"secret\",\r\n  \"profileImgUrl\": \"https://randomuser.me/api/portraits/women/19.jpg\",\r\n  \"role\": \"Admin\",\r\n  \"gender\": \"Female\",\r\n  \"isActive\": true,\r\n  \"emailAddress\": \"norahjones@server.com\",\r\n  \"meals\": [],\r\n  \"__v\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "meal",
+			"item": [
+				{
+					"name": "/api/meal",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"Heerlijke Spaghetti!\",\r\n    \"title\": \"Spaghetti bolognese\",\r\n    \"sort\": \"Dinner\",\r\n    \"dateServed\": \"2023-11-28T08:34:48.096Z\",\r\n    \"isVega\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/meal",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"meal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/meal",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/meal",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"meal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/meal/0",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/todo/0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"todo",
+								"0"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NTY0YTFiODE0NmYwNDJkNWQ3ZDE0MmIiLCJpYXQiOjE3MDExNjAzNzUsImV4cCI6MTcwMTMzMzE3NX0.sT4OIBLupcufq0tdWfdde7pOufGBb00gzq39CxVZWsc",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

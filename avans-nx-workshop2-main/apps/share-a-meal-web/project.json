@@ -1,0 +1,121 @@
+{
+    "name": "share-a-meal-web",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "prefix": "avans-nx-workshop",
+    "sourceRoot": "apps/share-a-meal-web/src",
+    "tags": [],
+    "targets": {
+        "build": {
+            "executor": "@angular-devkit/build-angular:browser",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/apps/share-a-meal-web",
+                "index": "apps/share-a-meal-web/src/index.html",
+                "main": "apps/share-a-meal-web/src/main.ts",
+                "polyfills": ["zone.js"],
+                "tsConfig": "apps/share-a-meal-web/tsconfig.app.json",
+                "assets": [
+                    "apps/share-a-meal-web/src/favicon.ico",
+                    "apps/share-a-meal-web/src/assets"
+                ],
+                "styles": ["apps/share-a-meal-web/src/styles.css"],
+                "scripts": []
+            },
+            "configurations": {
+                "production": {
+                    "budgets": [
+                        {
+                            "type": "initial",
+                            "maximumWarning": "500kb",
+                            "maximumError": "1mb"
+                        },
+                        {
+                            "type": "anyComponentStyle",
+                            "maximumWarning": "2kb",
+                            "maximumError": "4kb"
+                        }
+                    ],
+                    "outputHashing": "all",
+                    "fileReplacements": [
+                        {
+                            "replace": "libs/shared/util-env/src/lib/environment.ts",
+                            "with": "libs/shared/util-env/src/lib/environment.production.ts"
+                        }
+                    ]
+                },
+                "development": {
+                    "buildOptimizer": false,
+                    "optimization": false,
+                    "vendorChunk": true,
+                    "extractLicenses": false,
+                    "sourceMap": true,
+                    "namedChunks": true,
+                    "fileReplacements": [
+                        {
+                            "replace": "libs/shared/util-env/src/lib/environment.ts",
+                            "with": "libs/shared/util-env/src/lib/environment.development.ts"
+                        }
+                    ]
+                },
+                "render": {
+                    "fileReplacements": [
+                        {
+                            "replace": "libs/shared/util-env/src/lib/environment.ts",
+                            "with": "libs/shared/util-env/src/lib/environment.render.ts"
+                        }
+                    ]
+                }
+            },
+            "defaultConfiguration": "production"
+        },
+        "serve": {
+            "executor": "@angular-devkit/build-angular:dev-server",
+            "configurations": {
+                "production": {
+                    "browserTarget": "share-a-meal-web:build:production"
+                },
+                "development": {
+                    "browserTarget": "share-a-meal-web:build:development"
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+            "executor": "@angular-devkit/build-angular:extract-i18n",
+            "options": {
+                "browserTarget": "share-a-meal-web:build"
+            }
+        },
+        "lint": {
+            "executor": "@nx/eslint:lint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "apps/share-a-meal-web/**/*.ts",
+                    "apps/share-a-meal-web/**/*.html"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "apps/share-a-meal-web/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        },
+        "serve-static": {
+            "executor": "@nx/web:file-server",
+            "options": {
+                "buildTarget": "share-a-meal-web:build"
+            }
+        }
+    }
+}

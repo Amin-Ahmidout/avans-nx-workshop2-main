@@ -1,0 +1,110 @@
+<div class="container mt-5">
+    <!-- Titel -->
+    <h1 class="text-center mb-4">Over het Receptenplatform</h1>
+  
+    <!-- Naam en studentnummer -->
+    <section class="mb-5">
+      <h2>Naam en Studentnummer</h2>
+      <p class="lead">
+        <strong>Naam:</strong> Salim Fenzar<br>
+        <strong>Studentnummer:</strong> 2211259
+      </p>
+    </section>
+  
+    <!-- Beschrijving van de casus -->
+    <section class="mb-5">
+      <h2>Beschrijving van de Casus</h2>
+      <p class="fs-5">
+        Dit receptenplatform stelt gebruikers in staat om recepten te delen, op te slaan als favoriet, en te beoordelen. Het platform is gericht op kookliefhebbers die op zoek zijn naar inspiratie en een manier om hun favoriete recepten te beheren. Functionaliteiten omvatten:
+      </p>
+      <ul class="list-group">
+        <li class="list-group-item">Recepten toevoegen, bewerken en verwijderen.</li>
+        <li class="list-group-item">Recepten markeren als favoriet.</li>
+        <li class="list-group-item">Recepten beoordelen en feedback achterlaten.</li>
+        <li class="list-group-item">Zoeken en filteren op categorie, ingrediënten of naam.</li>
+      </ul>
+    </section>
+  
+    <!-- ERD -->
+    <section class="mb-5">
+      <h2>Datamodel</h2>
+      <p class="fs-5">Hieronder staat een ERD (Entity-Relationship Diagram) van het datamodel:</p>
+      <div class="text-center">
+        <img src="../../../assets/recipe.png" alt="Datamodel ERD" class="img-fluid rounded shadow" />
+      </div>
+    </section>
+  
+    <!-- Functionele requirements -->
+    <section>
+      <h2>Functionele Requirements</h2>
+      <table class="table table-bordered table-hover mt-4">
+        <thead class="table-dark">
+          <tr>
+            <th>FR</th>
+            <th>User Story</th>
+            <th>Acceptatiecriteria</th>
+            <th>Prioriteit (MoSCoW)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>FR1</td>
+            <td>
+              Als gebruiker wil ik een account kunnen aanmaken, zodat ik toegang heb tot het platform.
+            </td>
+            <td>
+              <ul>
+                <li>De gebruiker kan een account aanmaken met een naam, e-mailadres en wachtwoord.</li>
+                <li>De gebruiker ontvangt een bevestigingsmail na registratie.</li>
+                <li>Registratie is niet mogelijk zonder een geldig e-mailadres.</li>
+              </ul>
+            </td>
+            <td class="text-success fw-bold">Must</td>
+          </tr>
+          <tr>
+            <td>FR2</td>
+            <td>
+              Als gebruiker wil ik recepten kunnen toevoegen, zodat ik mijn favoriete recepten kan opslaan.
+            </td>
+            <td>
+              <ul>
+                <li>De gebruiker kan een recept aanmaken met naam, ingrediënten, en bereidingswijze.</li>
+                <li>Het recept wordt zichtbaar in de persoonlijke lijst van de gebruiker.</li>
+                <li>Alleen ingelogde gebruikers kunnen recepten toevoegen.</li>
+              </ul>
+            </td>
+            <td class="text-success fw-bold">Must</td>
+          </tr>
+          <tr>
+            <td>FR3</td>
+            <td>
+              Als gebruiker wil ik recepten kunnen markeren als favoriet, zodat ik ze snel kan terugvinden.
+            </td>
+            <td>
+              <ul>
+                <li>De gebruiker kan elk recept markeren als favoriet.</li>
+                <li>Favoriete recepten verschijnen in een aparte lijst.</li>
+                <li>Het systeem toont een foutmelding als een niet-ingelogde gebruiker een recept probeert te markeren.</li>
+              </ul>
+            </td>
+            <td class="text-warning fw-bold">Should</td>
+          </tr>
+          <tr>
+            <td>FR4</td>
+            <td>
+              Als gebruiker wil ik recepten kunnen beoordelen, zodat ik feedback kan geven op gedeelde recepten.
+            </td>
+            <td>
+              <ul>
+                <li>De gebruiker kan een score en opmerking toevoegen aan elk recept.</li>
+                <li>De beoordelingen worden zichtbaar voor alle gebruikers.</li>
+                <li>Beoordelingen zijn alleen mogelijk door ingelogde gebruikers.</li>
+              </ul>
+            </td>
+            <td class="text-primary fw-bold">Could</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+  
