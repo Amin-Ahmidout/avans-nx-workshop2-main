@@ -57,4 +57,5 @@ jobs:
         with:
           action: "close"
           app_location: "/"
+          output_location: "dist/apps/my-app"      # Map van de gebouwde app
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ASHY_STONE_03E313603 }}
