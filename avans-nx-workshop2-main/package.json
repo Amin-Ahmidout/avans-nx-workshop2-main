@@ -5,6 +5,7 @@
     "private": true,
     "scripts": {
       "deploy": "nx build my-app --configuration=production",
+      "build:azure": "nx build my-app --configuration=production",
       "build": "nx run-many --target=build",
       "build:my-app": "nx run my-app:build:production",
       "test": "nx run-many --target=test",
