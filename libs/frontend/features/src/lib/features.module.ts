@@ -6,6 +6,8 @@ import { UserEditComponent } from './users/user-edit/user-edit.component';
 import { RouterModule } from '@angular/router';
 import { ColumnsComponent } from './columns/columns.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { UserService } from '@avans-nx-workshop/shared/api';
+import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
     imports: [CommonModule, RouterModule,ReactiveFormsModule ],
@@ -14,6 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
         UserListComponent,
         UserEditComponent,
         ColumnsComponent
-    ]
+    ],
+    providers: [UserService, provideHttpClient()]
 })
 export class FeaturesModule {}
