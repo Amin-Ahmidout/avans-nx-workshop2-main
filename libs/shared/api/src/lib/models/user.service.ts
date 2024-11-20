@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@angular/core';
 import { IUserInfo, UserGender, UserRole } from './user.interface';
 import { Observable, of } from 'rxjs';
 
