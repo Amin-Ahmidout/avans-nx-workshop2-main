@@ -1,10 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@nestjs/common';
 import { IUserInfo, UserGender, UserRole } from './user.interface';
 import { Observable, of } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class UserService {
   private users: IUserInfo[] = [
     {
