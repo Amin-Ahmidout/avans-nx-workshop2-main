@@ -9,18 +9,28 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from './users/user.service';
 import { HttpClientModule } from '@angular/common/http'; 
 import { AuthService } from './auth/auth.service';
+import { BookListComponent } from './books/book-list/book-list.component';
+import { BookCreateComponent } from './books/book-create/book-create.component';
+
 @NgModule({
     imports: [CommonModule, RouterModule,ReactiveFormsModule, HttpClientModule  ],
     declarations: [
         UserDetailsComponent,
         UserListComponent,
         UserEditComponent,
-        ColumnsComponent
+        ColumnsComponent,
+        BookListComponent,
+        BookCreateComponent,
     ],
     providers:[
         UserService,
         AuthService
-    ]
+    ],
+    exports: [
+        // Exporteer de componenten zodat ze elders gebruikt kunnen worden
+        BookListComponent,
+        BookCreateComponent,
+      ],
 })
 export class FeaturesModule {}
 

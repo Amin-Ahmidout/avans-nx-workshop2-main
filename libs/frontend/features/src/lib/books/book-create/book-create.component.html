@@ -1,0 +1,38 @@
+<div class="container mt-4">
+    <h1 class="mb-4">Add New Book</h1>
+    <form [formGroup]="bookForm" (ngSubmit)="submitForm()">
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input
+          type="text"
+          id="title"
+          formControlName="title"
+          class="form-control"
+          required
+          placeholder="Enter book title"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          class="form-control"
+          required
+          placeholder="Enter book description"
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="genre" class="form-label">Genre</label>
+        <select id="genre" formControlName="genre" class="form-select">
+          <option value="Fiction">Fiction</option>
+          <option value="NonFiction">Non-Fiction</option>
+          <option value="Mystery">Mystery</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+  </div>
+  

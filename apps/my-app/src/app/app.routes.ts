@@ -4,6 +4,8 @@ import { AboutComponent } from './components/about/about.component';
 import { UserDetailsComponent, UserEditComponent, UserListComponent, ColumnsComponent } from '@avans-nx-workshop/features';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { BookListComponent } from '../../../../libs/frontend/features/src/lib/books/book-list/book-list.component';
+import { BookCreateComponent } from '../../../../libs/frontend/features/src/lib/books/book-create/book-create.component';
 
 export const appRoutes: Route[] = [
     // Hier komen onze URLs te staan.
@@ -19,6 +21,9 @@ export const appRoutes: Route[] = [
     ] },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
+    { path: 'books', component: BookListComponent },
+    { path: 'books/create', component: BookCreateComponent },
+    
 
 
 
