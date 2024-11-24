@@ -49,7 +49,10 @@ export class UserService {
         return createdItem;
     }
 
-
+    async deleteUserById(id: string): Promise<boolean> {
+        const result = await this.userModel.deleteOne({ _id: id }).exec();
+        return result.deletedCount > 0;
+      }
 
     async update(_id: string, user: UpdateUserDto): Promise<IUserInfo | null> {
         this.logger.log(`Updating user with ID: ${_id}`);

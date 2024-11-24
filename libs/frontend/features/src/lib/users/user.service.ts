@@ -22,4 +22,8 @@ export class UserService {
   updateUser(updatedUser: Partial<IUserInfo>): Observable<boolean> {
     return this.http.put<boolean>(`${this.apiUrl}/${updatedUser._id}`, updatedUser);
   }
+
+  deleteUser(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

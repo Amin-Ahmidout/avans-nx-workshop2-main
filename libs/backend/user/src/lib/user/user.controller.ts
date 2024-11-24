@@ -1,7 +1,10 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
+    HttpException,
+    HttpStatus,
     Param,
     Post,
     Put,
@@ -39,6 +42,14 @@ export class UserController {
         return this.userService.create(user);
     }
 
+    @Delete(':id')
+  async delete(@Param('id') id: string): Promise<void> {
+    const success = await this.userService.deleteUserById(id);
+    if (!success) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+  }
+
     @Put(':id')
     update(
         @Param('id') id: string,
@@ -46,4 +57,5 @@ export class UserController {
     ): Promise<IUserInfo | null> {
         return this.userService.update(id, user);
     }
+
 }
