@@ -1,0 +1,47 @@
+<div class="register-container d-flex justify-content-center align-items-center">
+    <div class="card p-4" style="width: 400px;margin-top: 10vh; margin-bottom: 10vh;">
+        <h3 class="text-center mb-4">Register</h3>
+        <form (ngSubmit)="register()">
+            <div class="form-group mb-3">
+                <input
+                    id="name"
+                    type="text"
+                    class="form-control"
+                    placeholder="Name"
+                    [(ngModel)]="registrationData.name"
+                    name="name"
+                    required
+                />
+            </div>
+            <div class="form-group mb-3">
+                <input
+                    id="emailAddress"
+                    type="email"
+                    class="form-control"
+                    placeholder="Email Address"
+                    [(ngModel)]="registrationData.emailAddress"
+                    name="emailAddress"
+                    required
+                />
+            </div>
+            <div class="form-group mb-3">
+                <input
+                    id="password"
+                    type="password"
+                    class="form-control"
+                    placeholder="Password"
+                    [(ngModel)]="registrationData.password"
+                    name="password"
+                    required
+                />
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mb-3">Register</button>
+            <div class="text-center">
+                <a routerLink="/login" class="text-decoration-none">Already have an account? Login</a>
+            </div>
+        </form>
+        <div *ngIf="errorMessage" class="error-message text-danger mt-3 text-center">
+            {{ errorMessage }}
+        </div>
+    </div>
+</div>

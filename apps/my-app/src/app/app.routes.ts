@@ -2,6 +2,8 @@ import { Route } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AboutComponent } from './components/about/about.component';
 import { UserDetailsComponent, UserEditComponent, UserListComponent, ColumnsComponent } from '@avans-nx-workshop/features';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
 
 export const appRoutes: Route[] = [
     // Hier komen onze URLs te staan.
@@ -15,6 +17,8 @@ export const appRoutes: Route[] = [
     {path: 'columns',component: ColumnsComponent, children:[
         {path: ':id', component: UserDetailsComponent}
     ] },
+    { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent },
 
 
 

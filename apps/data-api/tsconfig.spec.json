@@ -3,7 +3,10 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
-    "types": ["jest", "node"]
+    "moduleResolution": "node",
+    "types": ["jest", "node"],
+    "esModuleInterop": true, // Zorg voor compatibiliteit met ES Modules
+    "allowSyntheticDefaultImports": true // Maakt ES Modules-imports eenvoudiger
   },
   "include": [
     "jest.config.ts",

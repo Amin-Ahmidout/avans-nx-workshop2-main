@@ -6,17 +6,23 @@ import { UserEditComponent } from './users/user-edit/user-edit.component';
 import { RouterModule } from '@angular/router';
 import { ColumnsComponent } from './columns/columns.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { UserService } from '@avans-nx-workshop/shared/api';
-import { provideHttpClient } from '@angular/common/http';
-
+import { UserService } from './users/user.service';
+import { HttpClientModule } from '@angular/common/http'; 
+import { AuthService } from './auth/auth.service';
 @NgModule({
-    imports: [CommonModule, RouterModule,ReactiveFormsModule ],
+    imports: [CommonModule, RouterModule,ReactiveFormsModule, HttpClientModule  ],
     declarations: [
         UserDetailsComponent,
         UserListComponent,
         UserEditComponent,
         ColumnsComponent
     ],
-    providers: [UserService, provideHttpClient()]
+    providers:[
+        UserService,
+        AuthService
+    ]
 })
 export class FeaturesModule {}
+
+
+

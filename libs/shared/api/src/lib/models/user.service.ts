@@ -1,52 +1,45 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@nestjs/common';
 import { IUserInfo, UserGender, UserRole } from './user.interface';
-import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class UserService {
   private users: IUserInfo[] = [
     {
-      _id: "1",
-      name: "robin",
-      emailAddress: "r.schellius@avans.nl",
+      _id: '1',
+      name: 'robin',
+      emailAddress: 'r.schellius@avans.nl',
       role: UserRole.Unknown,
       gender: UserGender.Unknown,
-      password: "secret",
+      password: 'secret',
       isActive: true,
-      profileImgUrl: "https://randomuser.me/api/portraits/men/62.jpg"
+      profileImgUrl: 'https://randomuser.me/api/portraits/men/62.jpg',
     },
     {
-      _id: "2",
-      name: "Davide",
-      emailAddress: "d.ambesi@avans.nl",
+      _id: '2',
+      name: 'Davide',
+      emailAddress: 'd.ambesi@avans.nl',
       role: UserRole.Unknown,
       gender: UserGender.Unknown,
-      password: "secret",
+      password: 'secret',
       isActive: true,
-      profileImgUrl: "https://randomuser.me/api/portraits/men/47.jpg"
-    }
+      profileImgUrl: 'https://randomuser.me/api/portraits/men/47.jpg',
+    },
   ];
 
-  // Methode om gebruikers op te halen
-  getUsers(): Observable<IUserInfo[]> {
-    return of(this.users); 
+  getUsers(): IUserInfo[] {
+    return this.users;
   }
 
-  // Methode om één gebruiker op te halen op basis van ID
-  getUserById(id: string): Observable<IUserInfo | undefined> {
-    const user = this.users.find(u => u._id === id);
-    return of(user);
+  getUserById(id: string): IUserInfo | undefined {
+    return this.users.find((u) => u._id === id);
   }
 
-  // Methode om een gebruiker te updaten
-  updateUser(updatedUser: Partial<IUserInfo>): Observable<boolean> {
-    const index = this.users.findIndex(user => user._id === updatedUser._id);
+  updateUser(updatedUser: Partial<IUserInfo>): boolean {
+    const index = this.users.findIndex((user) => user._id === updatedUser._id);
     if (index !== -1) {
       this.users[index] = { ...this.users[index], ...updatedUser } as IUserInfo;
-      console.log('Updated user:', this.users[index]);
-      return of(true);
+      return true;
     }
-    console.error(`User with ID ${updatedUser._id} not found.`);
-    return of(false);
+    return false;
   }
 }

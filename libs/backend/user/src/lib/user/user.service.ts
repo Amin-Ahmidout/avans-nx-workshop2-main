@@ -1,5 +1,5 @@
 import { HttpException, Injectable, Logger } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User as UserModel, UserDocument } from './user.schema';
 import { IUser, IUserInfo } from '@avans-nx-workshop/shared/api';
@@ -21,10 +21,15 @@ export class UserService {
     }
 
     async findOne(_id: string): Promise<IUser | null> {
-        this.logger.log(`finding user with id ${_id}`);
-        const item = await this.userModel.findOne({ _id }).exec();
+        this.logger.log(`Finding user with id ${_id}`);
+        if (!Types.ObjectId.isValid(_id)) {
+            this.logger.error(`Invalid ObjectId: ${_id}`);
+            throw new HttpException(`Invalid ID format`, 400);
+        }
+        const item = await this.userModel.findById(new Types.ObjectId(_id)).exec();
         if (!item) {
             this.logger.debug('Item not found');
+            throw new HttpException('User not found', 404);
         }
         return item;
     }
@@ -44,8 +49,32 @@ export class UserService {
         return createdItem;
     }
 
+
+
     async update(_id: string, user: UpdateUserDto): Promise<IUserInfo | null> {
-        this.logger.log(`Update user ${user.name}`);
-        return this.userModel.findByIdAndUpdate({ _id }, user);
+        this.logger.log(`Updating user with ID: ${_id}`);
+        this.logger.log(`Received update payload: ${JSON.stringify(user)}`);
+    
+        if (!Types.ObjectId.isValid(_id)) {
+            this.logger.error(`Invalid ObjectId format: ${_id}`);
+            throw new HttpException('Invalid ID format', 400);
+        }
+    
+        const objectId = new Types.ObjectId(_id);
+        const updatedUser = await this.userModel.findByIdAndUpdate(
+            objectId,
+            user,
+            { new: true }
+        );
+    
+        if (!updatedUser) {
+            this.logger.error(`User with ID ${_id} not found`);
+            throw new HttpException(`User with ID ${_id} not found`, 404);
+        }
+    
+        this.logger.log(`User updated successfully: ${JSON.stringify(updatedUser)}`);
+        return updatedUser;
     }
+    
+    
 }

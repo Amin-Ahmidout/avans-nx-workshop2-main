@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IUserInfo, UserService } from '@avans-nx-workshop/shared/api';
+import { IUserInfo } from '@avans-nx-workshop/shared/api';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'avans-nx-workshop-user-details',
@@ -26,16 +27,30 @@ export class UserDetailsComponent implements OnInit {
   errorMessage: string | null = null;
   // Ophalen van gebruikersdetails via de UserService
   getUserDetails(id: string): void {
-    this.userService.getUsers().subscribe(users => {
-      // Zoek de gebruiker met de overeenkomende ID
-      const user = users.find(u => u._id === id);
-      if (user) {
-        this.userDetails = user;
-        console.log('User details:', user);
-      } else {
-        this.errorMessage = `User with ID ${id} not found.`;
-        console.error(`User with ID ${id} not found.`);
+    this.userService.getUsers().subscribe({
+      next: (response: any) => {
+        // Controleer of de data een array is of een object met een 'results'-eigenschap
+        const users = Array.isArray(response) ? response : response.results;
+  
+        if (Array.isArray(users)) {
+          const user = users.find(u => u._id === id);
+          if (user) {
+            this.userDetails = user;
+            console.log('User details:', user);
+          } else {
+            this.errorMessage = `User with ID ${id} not found.`;
+            console.error(this.errorMessage);
+          }
+        } else {
+          this.errorMessage = 'Unexpected response format from API.';
+          console.error(this.errorMessage, response);
+        }
+      },
+      error: (err) => {
+        this.errorMessage = 'Error fetching users from the API.';
+        console.error(this.errorMessage, err);
       }
     });
   }
+
 }

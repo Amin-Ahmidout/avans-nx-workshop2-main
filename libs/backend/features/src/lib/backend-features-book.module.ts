@@ -1,23 +1,23 @@
 import { Module } from '@nestjs/common';
-import { MealController } from './meal/meal.controller';
-import { MealService } from './meal/meal.service';
+import { BookController } from './book/book.controller';
+import { BookService } from './book/book.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User as UserModel, UserSchema } from '@avans-nx-workshop/backend/user';
-import { Meal as MealModel, MealSchema } from './meal/meal.schema';
+import { Book as BookModel, BookSchema } from './book/book.schema';
 import { AuthModule } from '@avans-nx-workshop/backend/auth';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
     imports: [
         MongooseModule.forFeature([
-            { name: MealModel.name, schema: MealSchema },
+            { name: BookModel.name, schema: BookSchema },
             { name: UserModel.name, schema: UserSchema }
         ]),
         JwtModule,
         AuthModule
     ],
-    controllers: [MealController],
-    providers: [MealService],
-    exports: [MealService]
+    controllers: [BookController],
+    providers: [BookService],
+    exports: [BookService]
 })
-export class BackendFeaturesMealModule {}
+export class BackendFeaturesBookModule {}

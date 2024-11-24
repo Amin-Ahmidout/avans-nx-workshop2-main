@@ -8,6 +8,10 @@ import { AboutComponent } from './components/about/about.component';
 import { HeaderComponent } from './components/ui/header/header.component';
 import { FooterComponent } from './components/ui/footer/footer.component';
 import { FeaturesModule } from '@avans-nx-workshop/features';
+import { FormsModule } from '@angular/forms';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent} from './components/register/register.component'
+
 
 @NgModule({
     declarations: [
@@ -15,14 +19,17 @@ import { FeaturesModule } from '@avans-nx-workshop/features';
         DashboardComponent,
         AboutComponent,
         HeaderComponent,
-        FooterComponent
+        FooterComponent,
+        LoginComponent,
+        RegisterComponent
     ],
     imports: [
         BrowserModule,
         RouterModule.forRoot(appRoutes, {
             initialNavigation: 'enabledBlocking'
         }),
-        FeaturesModule
+        FeaturesModule,
+        FormsModule 
     ],
     providers: [],
     bootstrap: [AppComponent]

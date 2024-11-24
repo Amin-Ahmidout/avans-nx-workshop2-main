@@ -3,9 +3,13 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
+    "moduleResolution": "node",
     "types": ["node"],
     "emitDecoratorMetadata": true,
-    "target": "es2021"
+    "experimentalDecorators": true,
+    "esModuleInterop": true, // Zorgt voor betere compatibiliteit met ES Modules
+    "allowSyntheticDefaultImports": true, // Maakt het eenvoudiger om ES Modules te importeren
+    "target": "es2021" // Modern target
   },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
   "include": ["src/**/*.ts"]

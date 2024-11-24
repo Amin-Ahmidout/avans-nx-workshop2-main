@@ -67,13 +67,32 @@ export class AuthService {
     }
 
     async register(user: CreateUserDto): Promise<IUserIdentity> {
-        this.logger.log(`Register user ${user.name}`);
-        if (await this.userModel.findOne({ emailAddress: user.emailAddress })) {
-            this.logger.debug('user exists');
-            throw new ConflictException('User already exist');
+        this.logger.log(`Registering user: ${user.name}`);
+    
+        // Check if the user already exists
+        const existingUser = await this.userModel.findOne({ emailAddress: user.emailAddress });
+        if (existingUser) {
+            this.logger.debug('User already exists');
+            throw new ConflictException('User already exists');
         }
-        this.logger.debug('User not found, creating');
-        const createdItem = await this.userModel.create(user);
-        return createdItem;
+    
+        // Create the user in the database
+        this.logger.debug('User not found, creating new user');
+        const createdUser = await this.userModel.create(user);
+    
+        // Generate a JWT token for the user
+        const payload = { user_id: createdUser._id.toString() }; // Ensure the ObjectID is converted to a string
+        const token = this.jwtService.sign(payload);
+    
+        // Return the created user with the token
+        return {
+            results: null, // Add the results property
+            name: createdUser.name,
+            emailAddress: createdUser.emailAddress,
+            profileImgUrl: createdUser.profileImgUrl,
+            role: createdUser.role,
+            token: token, // Include the token
+        };
     }
+    
 }

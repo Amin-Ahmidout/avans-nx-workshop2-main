@@ -1,5 +1,5 @@
 // import { IEntity } from 'libs/share-a-meal/common/src/lib/entity/entity.model';
-import { IMeal } from './meal.interface';
+import { IBook } from './book.interface';
 import { IToken, IUserRegistration } from './auth.interface';
 import { Id } from './id.type';
 
@@ -20,7 +20,8 @@ export enum UserGender {
  * Minimal user information
  */
 
-export interface IUserIdentity { // extends IEntity {
+export interface IUserIdentity {
+    results: any; // extends IEntity {
     name: string;
     emailAddress: string;
     profileImgUrl: string;
@@ -43,7 +44,6 @@ export interface IUserInfo extends IUserRegistration {
  * All user information, incl. domain entities
  */
 export interface IUser extends IUserInfo {
-    meals: IMeal[];
 }
 
 export type ICreateUser = Pick<IUser, 'name' | 'password' | 'emailAddress'>;
