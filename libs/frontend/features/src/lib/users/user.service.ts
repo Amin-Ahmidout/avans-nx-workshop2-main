@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IUserInfo } from '@avans-nx-workshop/shared/api';
+import { environment } from '../../../../../../libs/shared/util-env/src/lib/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = 'http://localhost:3000/api/user'; 
+  private apiUrl = `${environment.dataApiUrl}/user`;
 
   constructor(private http: HttpClient) {}
 

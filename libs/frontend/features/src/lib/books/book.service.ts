@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IBook, ICreateBook } from '@avans-nx-workshop/shared/api';
+import { environment } from '../../../../../../libs/shared/util-env/src/lib/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BookService {
-  private apiUrl = 'http://localhost:3000/api/book';
+    private apiUrl = `${environment.dataApiUrl}/book`;
 
   constructor(private http: HttpClient) {}
 
