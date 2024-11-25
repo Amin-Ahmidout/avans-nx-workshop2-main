@@ -1,8 +1,16 @@
-import { Controller, Delete, HttpException, HttpStatus, Logger, Request } from '@nestjs/common';
+import {
+    Controller,
+    Delete,
+    HttpException,
+    HttpStatus,
+    Logger,
+    Put,
+    Request
+} from '@nestjs/common';
 import { BookService } from './book.service';
 import { Get, Param, Post, Body, UseGuards } from '@nestjs/common';
 import { IBook } from '@avans-nx-workshop/shared/api';
-import { CreateBookDto } from '@avans-nx-workshop/backend/dto';
+import { CreateBookDto, UpdateBookDto } from '@avans-nx-workshop/backend/dto';
 import { AuthGuard } from '@avans-nx-workshop/backend/auth';
 
 @Controller('book')
@@ -34,5 +42,21 @@ export class BookController {
         if (!success) {
             throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
         }
+    }
+
+    @Put(':id')
+    async updateBook(
+        @Param('id') id: string,
+        @Body() updateBookDto: UpdateBookDto
+    ): Promise<IBook | null> {
+        console.log('Received UpdateBookDto:', updateBookDto); // Log de data
+        const updatedBook = await this.bookService.updateBook(
+            id,
+            updateBookDto
+        );
+        if (!updatedBook) {
+            throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
+        }
+        return updatedBook;
     }
 }

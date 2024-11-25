@@ -59,17 +59,26 @@ export class BookService {
         return null;
     }
 
-    async update(_id: string, book: UpdateBookDto): Promise<IBook | null> {
-        this.logger.log(`Updating book with id ${_id}`);
-        const updatedBook = await this.bookModel
-            .findByIdAndUpdate({ _id }, book, { new: true })
-            .exec();
-        if (!updatedBook) {
-            this.logger.debug('Book not found');
-            throw new HttpException('Book not found', 404);
+    async updateBook(id: string, updateBookDto: UpdateBookDto): Promise<IBook | null> {
+        // Controleer en converteer publicationDate naar een Date-object
+        if (updateBookDto.publicationDate && typeof updateBookDto.publicationDate === 'string') {
+          updateBookDto.publicationDate = new Date(updateBookDto.publicationDate);
         }
+      
+        const updatedBook = await this.bookModel.findByIdAndUpdate(id, updateBookDto, {
+          new: true, // Return the updated document
+        }).exec();
+      
+        if (!updatedBook) {
+          this.logger.warn(`Book with ID ${id} not found`);
+          return null;
+        }
+      
+        this.logger.log(`Book with ID ${id} successfully updated`);
         return updatedBook;
-    }
+      }
+      
+      
 
     async deleteBookById(id: string): Promise<boolean> {
         const result = await this.bookModel.deleteOne({ _id: id }).exec();

@@ -27,7 +27,18 @@ export class BookService {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<void>(url, { headers: this.getAuthHeaders() });
   }
-  
+
+  updateBook(id: string, book: Partial<IBook>): Observable<IBook> {
+    return this.http.put<IBook>(`${this.apiUrl}/${id}`, book, {
+      headers: this.getAuthHeaders(),
+    });
+  }  
+
+  getBookById(id: string): Observable<IBook> {
+    return this.http.get<IBook>(`${this.apiUrl}/${id}`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token'); // Haal de token uit localStorage

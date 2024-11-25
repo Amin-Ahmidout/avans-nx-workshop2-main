@@ -6,6 +6,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { BookListComponent } from '../../../../libs/frontend/features/src/lib/books/book-list/book-list.component';
 import { BookCreateComponent } from '../../../../libs/frontend/features/src/lib/books/book-create/book-create.component';
+import { BookEditComponent } from '../../../../libs/frontend/features/src/lib/books/book-edit/book-edit.component';
 
 export const appRoutes: Route[] = [
     // Hier komen onze URLs te staan.
@@ -23,6 +24,8 @@ export const appRoutes: Route[] = [
     { path: 'register', component: RegisterComponent },
     { path: 'books', component: BookListComponent },
     { path: 'books/create', component: BookCreateComponent },
+    { path: 'books/:id/edit', component: BookEditComponent },
+
     
 
 

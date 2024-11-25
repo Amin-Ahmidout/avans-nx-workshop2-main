@@ -26,6 +26,7 @@
           <button class="btn btn-danger btn-sm" (click)="deleteBook(book.id)">
             Delete
           </button>
+          <a [routerLink]="['/books', book.id, 'edit']" class="btn btn-warning btn-sm">Edit</a>
         </div>
       </div>
     </div>
