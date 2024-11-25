@@ -6,5 +6,5 @@ export const environment: IEnvironment = {
     ROOT_DOMAIN_URL: 'https://nxworkshop.azurewebsites.net',
     dataApiUrl: 'https://nxworkshop.azurewebsites.net/api',
 
-    MONGO_DB_CONNECTION_STRING: 'mongodb://remote-host/mongodb'
+    MONGO_DB_CONNECTION_STRING: 'mongodb+srv://admin:Admin123!@cluster0.pkmgh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 };
