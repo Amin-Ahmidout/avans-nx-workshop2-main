@@ -4,11 +4,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BackendFeaturesBookModule } from '@avans-nx-workshop/backend/features';
 import { UsersModule } from '@avans-nx-workshop/backend/user';
 import { AuthModule } from '@avans-nx-workshop/backend/auth';
+import { environment } from '@avans-nx-workshop/shared/util-env';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // Zorgt ervoor dat het overal beschikbaar is
+      load: [()=> environment],
     }),
     BackendFeaturesBookModule,
     AuthModule,
