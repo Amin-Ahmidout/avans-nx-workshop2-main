@@ -99,5 +99,5 @@ jobs:
               with:
                   app-name: 'Amin-nx'
                   slot-name: 'Production'
-                  publish-profile: ${{ secrets.DATA_API_PUBLISHPROFILE }}
+                  publish-profile: ${{ secrets.NEXTJS_PUBLISHPROFILE }}
                   package: .
