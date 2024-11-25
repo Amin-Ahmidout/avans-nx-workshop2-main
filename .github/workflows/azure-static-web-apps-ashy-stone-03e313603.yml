@@ -6,7 +6,7 @@ name: Build and deploy a Node.js app and an Angular app to an Azure
 on:
     push:
         branches:
-            - release
+            - main
     workflow_dispatch:
 
 jobs:
