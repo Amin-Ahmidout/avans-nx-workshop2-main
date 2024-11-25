@@ -19,9 +19,8 @@ export class BookService {
     ) {}
 
     /**
-     * Zie https://mongoosejs.com/docs/populate.html#population
-     *
-     * @returns
+     * Haal alle boeken op uit de database
+     * @returns Lijst van boeken
      */
     async findAll(): Promise<IBook[]> {
         this.logger.log(`Finding all books`);
@@ -32,6 +31,11 @@ export class BookService {
         return books;
     }
 
+    /**
+     * Haal een boek op met een specifieke ID
+     * @param _id Boek ID
+     * @returns Boekdetails of null als niet gevonden
+     */
     async findOne(_id: string): Promise<IBook | null> {
         this.logger.log(`Finding book with id ${_id}`);
         const book = await this.bookModel.findOne({ _id }).exec();
@@ -41,48 +45,64 @@ export class BookService {
         return book;
     }
 
+    /**
+     * Maak een nieuw boek aan
+     * @param req Request met boekgegevens
+     * @returns Gemaakt boek
+     */
     async create(req: any): Promise<IBook | null> {
         const bookData = req.body;
 
-        if (!bookData.publicationDate) {
-            bookData.publicationDate = new Date();
+        if (!bookData.publicationYear) {
+            throw new HttpException('Publication year is required', 400);
         }
 
-        if (bookData) {
-            this.logger.log(`Creating book "${bookData.title}" with author "${bookData.author}"`);
-            const createdBook = {
-                ...bookData,
-                addedBy: req.user, // Bewaar de gegevens van de ingelogde gebruiker voor tracking
-            };
-            return this.bookModel.create(createdBook);
+        if (typeof bookData.publicationYear !== 'string' || isNaN(Number(bookData.publicationYear))) {
+            throw new HttpException('Publication year must be a valid string representing a year', 400);
         }
-        return null;
+
+        this.logger.log(`Creating book "${bookData.title}" with author "${bookData.author}"`);
+        const createdBook = {
+            ...bookData,
+            addedBy: req.user, // Bewaar de gegevens van de ingelogde gebruiker voor tracking
+        };
+        return this.bookModel.create(createdBook);
     }
 
+    /**
+     * Update een bestaand boek
+     * @param id Boek ID
+     * @param updateBookDto Boekgegevens die geüpdatet moeten worden
+     * @returns Geüpdatet boek of null als niet gevonden
+     */
     async updateBook(id: string, updateBookDto: UpdateBookDto): Promise<IBook | null> {
-        // Controleer en converteer publicationDate naar een Date-object
-        if (updateBookDto.publicationDate && typeof updateBookDto.publicationDate === 'string') {
-          updateBookDto.publicationDate = new Date(updateBookDto.publicationDate);
+        if (
+            updateBookDto.publicationYear &&
+            (typeof updateBookDto.publicationYear !== 'string' || isNaN(Number(updateBookDto.publicationYear)))
+        ) {
+            throw new HttpException('Publication year must be a valid string representing a year', 400);
         }
-      
+
         const updatedBook = await this.bookModel.findByIdAndUpdate(id, updateBookDto, {
-          new: true, // Return the updated document
+            new: true, // Return the updated document
         }).exec();
-      
+
         if (!updatedBook) {
-          this.logger.warn(`Book with ID ${id} not found`);
-          return null;
+            this.logger.warn(`Book with ID ${id} not found`);
+            return null;
         }
-      
+
         this.logger.log(`Book with ID ${id} successfully updated`);
         return updatedBook;
-      }
-      
-      
+    }
 
+    /**
+     * Verwijder een boek op basis van ID
+     * @param id Boek ID
+     * @returns Boolean of het boek succesvol is verwijderd
+     */
     async deleteBookById(id: string): Promise<boolean> {
         const result = await this.bookModel.deleteOne({ _id: id }).exec();
-        return result.deletedCount > 0; 
-      }
-      
+        return result.deletedCount > 0;
+    }
 }

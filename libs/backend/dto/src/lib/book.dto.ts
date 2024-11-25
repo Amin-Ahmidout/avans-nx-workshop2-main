@@ -1,7 +1,7 @@
 import {
     IsNotEmpty,
     IsString,
-    IsDate,
+    isString,
     IsOptional,
 } from 'class-validator';
 import {
@@ -28,9 +28,9 @@ export class CreateBookDto implements ICreateBook {
     @IsNotEmpty()
     genre!: BookGenre;
 
-    @IsDate()
+    @IsString()
     @IsOptional() // Publicatiedatum optioneel maken
-    publicationDate?: Date;
+    publicationYear?: string;
 
     @IsString()
     @IsNotEmpty()
@@ -57,9 +57,9 @@ export class UpsertBookDto implements IUpsertBook {
     @IsNotEmpty()
     author!: string;
 
-    @IsDate()
+    @IsString()
     @IsNotEmpty()
-    publicationDate!: Date;
+    publicationYear!: string;
 
     @IsString()
     @IsNotEmpty()
@@ -86,9 +86,9 @@ export class UpdateBookDto implements IUpdateBook {
     @IsOptional()
     author?: string;
 
-    @IsDate()
+    @IsString()
     @IsOptional()
-    publicationDate?: Date;
+    publicationYear?: string;
 
     @IsString()
     @IsOptional()

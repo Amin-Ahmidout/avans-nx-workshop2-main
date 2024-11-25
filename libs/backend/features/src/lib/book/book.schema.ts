@@ -16,8 +16,8 @@ export class Book implements IBook {
     @Prop({ required: true })
     author!: string;
 
-    @Prop({ required: true, default: Date.now }) // Stel de publicatiedatum in op de huidige datum.
-    publicationDate!: Date; 
+    @Prop({ required: true, type: String }) // Opslaan als string voor eenvoud
+    publicationYear!: string; 
 
     @Prop({ required: true, enum: BookGenre, type: String })
     genre!: BookGenre;

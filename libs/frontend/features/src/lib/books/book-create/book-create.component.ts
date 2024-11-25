@@ -23,7 +23,7 @@ export class BookCreateComponent implements OnInit {
       title: ['', Validators.required],
       description: ['', Validators.required],
       author: ['', Validators.required],
-      publicationDate: ['', Validators.required],
+      publicationYear: ['', Validators.required],
       genre: ['', Validators.required],
     });
   }

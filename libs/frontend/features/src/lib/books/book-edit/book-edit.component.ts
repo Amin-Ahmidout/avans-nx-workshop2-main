@@ -44,13 +44,12 @@ export class BookEditComponent implements OnInit {
 
   // Initialiseer het formulier met bestaande boekgegevens
   private initializeForm(book: IBook): void {
-    const formattedDate = new Date(book.publicationDate).toISOString().split('T')[0]; // Converteer naar yyyy-MM-dd formaat
     this.bookForm = this.fb.group({
       title: [book.title, Validators.required],
       author: [book.author, Validators.required],
       description: [book.description, Validators.required],
       genre: [book.genre, Validators.required],
-      publicationDate: [formattedDate, Validators.required], // Gebruik het geformatteerde formaat
+      publicationYear: [book.publicationYear, Validators.required], // Gebruik het geformatteerde formaat
     });
   }
 
@@ -60,7 +59,7 @@ export class BookEditComponent implements OnInit {
       // Payload voorbereiden
       const updatedBook = {
         ...this.bookForm.value,
-        publicationDate: new Date(this.bookForm.value.publicationDate), // Zorg dat publicationDate een Date-object is
+        publicationYear: this.bookForm.value.publicationYear.toString(), // Zorg dat publicationYear een string is
       };
   
       console.log('Updated Book Data being sent to backend:', updatedBook); // Debugging
@@ -80,6 +79,7 @@ export class BookEditComponent implements OnInit {
       this.errorMessage = 'Please fill out all required fields.';
     }
   }
+  
   
   
 
