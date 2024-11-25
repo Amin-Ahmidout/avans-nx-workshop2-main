@@ -13,6 +13,17 @@
         />
       </div>
       <div class="mb-3">
+        <label for="author" class="form-label">Author</label>
+        <input
+          type="text"
+          id="author"
+          formControlName="author"
+          class="form-control"
+          required
+          placeholder="Enter book author"
+        />
+      </div>
+      <div class="mb-3">
         <label for="description" class="form-label">Description</label>
         <textarea
           id="description"
@@ -31,6 +42,16 @@
           <option value="Fantasy">Fantasy</option>
           <option value="Other">Other</option>
         </select>
+      </div>
+      <div class="mb-3">
+        <label for="publicationDate" class="form-label">Publication Date</label>
+        <input
+          type="date"
+          id="publicationDate"
+          formControlName="publicationDate"
+          class="form-control"
+          required
+        />
       </div>
       <button type="submit" class="btn btn-primary">Create</button>
     </form>

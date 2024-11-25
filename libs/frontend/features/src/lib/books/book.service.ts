@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IBook, ICreateBook } from '@avans-nx-workshop/shared/api';
 
@@ -12,10 +12,21 @@ export class BookService {
   constructor(private http: HttpClient) {}
 
   getAllBooks(): Observable<IBook[]> {
-    return this.http.get<IBook[]>(this.apiUrl);
+    return this.http.get<IBook[]>(this.apiUrl, {
+      headers: this.getAuthHeaders(),
+    });
   }
 
   createBook(book: ICreateBook): Observable<IBook> {
-    return this.http.post<IBook>(this.apiUrl, book);
+    return this.http.post<IBook>(this.apiUrl, book, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token'); // Haal de token uit localStorage
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`, // Voeg de token toe aan de Authorization-header
+    });
   }
 }

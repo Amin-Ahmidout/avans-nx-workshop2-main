@@ -1,16 +1,26 @@
 <div class="container mt-4">
-    <h1 class="mb-4">Books</h1>
-    <button routerLink="/books/create" class="btn btn-primary mb-3">
-      Add New Book
-    </button>
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let book of books">
-        <h5>{{ book.title }}</h5>
-        <p>{{ book.description }}</p>
-        <p><strong>Author:</strong> {{ book.author }}</p>
-        <p><strong>Genre:</strong> {{ book.genre }}</p>
-        <p><strong>Added By:</strong> {{ book.addedBy.name }}</p>
-      </li>
-    </ul>
-  </div>
+  <h1 class="mb-4">Books</h1>
   
+  <!-- Add New Book Button -->
+  <button class="btn btn-primary mb-3" routerLink="/books/create">
+    Add New Book
+  </button>
+
+  <!-- Book List -->
+  <div *ngIf="books && books.length > 0; else noBooks" class="list-group">
+    <div *ngFor="let book of books">
+      <h5>{{ book.title }}</h5>
+      <p>{{ book.description }}</p>
+      <p><strong>Author:</strong> {{ book.author }}</p>
+      <p><strong>Genre:</strong> {{ book.genre }}</p>
+    </div>
+  </div>
+  <ng-template #noBooks>
+    <p>No books available. Add a new book to get started!</p>
+  </ng-template>
+
+  <!-- No Added By Template -->
+  <ng-template #noAddedBy>
+    <span>Unknown</span>
+  </ng-template>
+</div>

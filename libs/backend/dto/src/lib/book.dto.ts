@@ -27,6 +27,14 @@ export class CreateBookDto implements ICreateBook {
     @IsString()
     @IsNotEmpty()
     genre!: BookGenre;
+
+    @IsDate()
+    @IsOptional() // Publicatiedatum optioneel maken
+    publicationDate?: Date;
+
+    @IsString()
+    @IsNotEmpty()
+    author!: string; // Voeg dit toe als verplicht veld
 }
 
 /**

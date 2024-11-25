@@ -21,6 +21,7 @@ export enum UserGender {
  */
 
 export interface IUserIdentity {
+    user_id?: string;
     results: any; // extends IEntity {
     name: string;
     emailAddress: string;

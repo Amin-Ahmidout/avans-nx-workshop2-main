@@ -43,20 +43,16 @@ export class BookService {
 
     async create(req: any): Promise<IBook | null> {
         const bookData = req.body;
-        const userId = req.user.user_id;
 
-        if (bookData && userId) {
-            this.logger.log(`Creating book "${bookData.title}" for user ${userId}`);
-            const user = await this.userModel
-                .findOne({ _id: userId })
-                .select('-password -books -role -__v -isActive')
-                .exec();
-            if (!user) {
-                throw new HttpException('User not found', 404);
-            }
+        if (!bookData.publicationDate) {
+            bookData.publicationDate = new Date();
+        }
+        
+        if (bookData) {
+            this.logger.log(`Creating book "${bookData.title}" with author "${bookData.author}"`);
             const createdBook = {
                 ...bookData,
-                addedBy: user,
+                addedBy: req.user, // Bewaar de gegevens van de ingelogde gebruiker voor tracking
             };
             return this.bookModel.create(createdBook);
         }

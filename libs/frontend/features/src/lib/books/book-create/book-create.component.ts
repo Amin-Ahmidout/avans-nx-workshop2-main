@@ -22,21 +22,28 @@ export class BookCreateComponent implements OnInit {
     this.bookForm = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
+      author: ['', Validators.required],
+      publicationDate: ['', Validators.required],
       genre: ['', Validators.required],
     });
   }
 
   submitForm(): void {
     if (this.bookForm.valid) {
+      console.log('Submitting form:', this.bookForm.value); // Debug logging
       this.bookService.createBook(this.bookForm.value).subscribe({
-        next: () => this.router.navigate(['/books']),
+        next: () => {
+          console.log('Book created successfully!');
+          this.router.navigate(['/books']);
+        },
         error: (err) => {
           this.errorMessage = 'Error creating book.';
-          console.error(err);
+          console.error('Error details:', err); // Log de volledige fout
         },
       });
     } else {
       this.errorMessage = 'Please fill out all required fields.';
     }
   }
+  
 }
