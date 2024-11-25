@@ -47,7 +47,7 @@ export class BookService {
         if (!bookData.publicationDate) {
             bookData.publicationDate = new Date();
         }
-        
+
         if (bookData) {
             this.logger.log(`Creating book "${bookData.title}" with author "${bookData.author}"`);
             const createdBook = {
@@ -70,4 +70,10 @@ export class BookService {
         }
         return updatedBook;
     }
+
+    async deleteBookById(id: string): Promise<boolean> {
+        const result = await this.bookModel.deleteOne({ _id: id }).exec();
+        return result.deletedCount > 0; 
+      }
+      
 }

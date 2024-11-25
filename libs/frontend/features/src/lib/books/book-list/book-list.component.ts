@@ -25,4 +25,18 @@ export class BookListComponent implements OnInit {
       },
     });
   }
+
+  deleteBook(id: string): void {
+    if (confirm('Are you sure you want to delete this book?')) {
+      this.bookService.deleteBook(id).subscribe({
+        next: () => {
+          this.books = this.books.filter((book) => book.id !== id);
+        },
+        error: (err) => {
+          this.errorMessage = 'Error deleting book.';
+          console.error(err);
+        },
+      });
+    }
+}
 }

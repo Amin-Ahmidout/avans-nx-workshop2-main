@@ -23,6 +23,12 @@ export class BookService {
     });
   }
 
+  deleteBook(id: string): Observable<void> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.delete<void>(url, { headers: this.getAuthHeaders() });
+  }
+  
+
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token'); // Haal de token uit localStorage
     return new HttpHeaders({

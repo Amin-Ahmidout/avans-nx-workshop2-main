@@ -23,6 +23,9 @@
         </div>
         <div class="card-footer text-end">
           <small class="text-muted">Added by: {{ book.addedBy?.user_id }}</small>
+          <button class="btn btn-danger btn-sm" (click)="deleteBook(book.id)">
+            Delete
+          </button>
         </div>
       </div>
     </div>

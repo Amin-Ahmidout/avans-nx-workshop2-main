@@ -1,4 +1,4 @@
-import { Controller, Logger, Request } from '@nestjs/common';
+import { Controller, Delete, HttpException, HttpStatus, Logger, Request } from '@nestjs/common';
 import { BookService } from './book.service';
 import { Get, Param, Post, Body, UseGuards } from '@nestjs/common';
 import { IBook } from '@avans-nx-workshop/shared/api';
@@ -21,11 +21,18 @@ export class BookController {
         return this.bookService.findOne(id);
     }
 
-   
     @Post('')
     @UseGuards(AuthGuard)
     create(@Request() req: any): Promise<IBook | null> {
         this.logger.log('req.user.user_id = ', req.user.user_id);
         return this.bookService.create(req);
+    }
+
+    @Delete(':id')
+    async delete(@Param('id') id: string): Promise<void> {
+        const success = await this.bookService.deleteBookById(id);
+        if (!success) {
+            throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
+        }
     }
 }
