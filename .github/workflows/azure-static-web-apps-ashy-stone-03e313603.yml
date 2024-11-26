@@ -6,7 +6,7 @@ name: Build and deploy a Node.js app and an Angular app to an Azure
 on:
     push:
         branches:
-            - release
+            - main
     workflow_dispatch:
 
 jobs:
@@ -98,6 +98,6 @@ jobs:
               uses: azure/webapps-deploy@v3
               with:
                   app-name: 'books-data-api'
-                
+                  slot-name: 'production'
                   publish-profile: ${{ secrets.BACKEND_API }}
                   package: .
