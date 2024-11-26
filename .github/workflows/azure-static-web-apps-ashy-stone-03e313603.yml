@@ -1,91 +1,94 @@
-name: Deploy Angular Frontend and NestJS Backend to Azure
-
+name: Build and deploy a Node.js app and an Angular app to an Azure
+ 
 on:
   push:
     branches:
       - main
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-      - main
-
+  workflow_dispatch:
+ 
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build Applications
+ 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
+      - uses: actions/checkout@v4
+ 
+      - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
-
-      - name: Install dependencies and build
+ 
+      - name: npm install, build, and test
         run: |
           npm install
           npm run build --prod
-
+ 
       - name: Zip artifacts for deployment
         run: |
           echo ${GITHUB_WORKSPACE}
           cd ${GITHUB_WORKSPACE}/dist/apps/data-api/ && zip ${GITHUB_WORKSPACE}/data-api-release.zip ./* -r
           cd ${GITHUB_WORKSPACE}/dist/apps/my-app/ && zip ${GITHUB_WORKSPACE}/my-app-release.zip ./* -r
-
-      - name: Upload Angular frontend artifact
+ 
+      - name: Upload frontend-app artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: my-app
           path: my-app-release.zip
-
-      - name: Upload NestJS backend artifact
+      - name: Upload backend-api artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: data-api
           path: data-api-release.zip
 
-  deploy-frontend:
+  deploy-frontend-app:
     runs-on: ubuntu-latest
     needs: build
-    name: Deploy Angular Frontend
+    environment:
+      name: 'Production'
+ 
     steps:
-      - name: Download Angular artifact
+      - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: my-app
-
-      - name: Unzip Angular artifact
+ 
+      - name: Unzip artifact for deployment
         run: unzip my-app-release.zip
-
-      - name: Deploy to Azure Static Web Apps
-        id: deploy-frontend
+      - name: Deploy to static azure web app
+        id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ASHY_STONE_03E313603 }}
-          app_location: "apps/my-app" # Controleer de map van je Angular app
-          output_location: "dist/apps/my-app" # Controleer de output map
-          api_location: "" # Leeg laten als je geen Azure Function API gebruikt
-
-  deploy-backend:
+          action: "upload"
+          app_location: "/" # App source code path
+          api_location: "" # Api source code path - optional
+          output_location: "dist/apps/my-app" # Built app content directory - optional
+ 
+ 
+  deploy-backend-api:
     runs-on: ubuntu-latest
     needs: build
-    name: Deploy NestJS Backend
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+ 
     steps:
-      - name: Download NestJS artifact
+      - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: data-api
-
-      - name: Unzip NestJS artifact
+ 
+      - name: Unzip artifact for deployment
         run: unzip data-api-release.zip
-
+ 
       - name: Install dependencies
         run: npm install
-
-      - name: Deploy NestJS to Azure Web App
+ 
+      - name: 'Deploy to Azure Web App'
+        id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'books-data-api' # Naam van je Azure App Service voor de backend
+          app-name: 'books-data-api'
+          slot-name: 'Production'
           publish-profile: ${{ secrets.BACKEND_API }}
           package: .
