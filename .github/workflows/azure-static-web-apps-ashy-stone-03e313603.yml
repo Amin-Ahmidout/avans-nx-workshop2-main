@@ -91,7 +91,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'Books-data-api'
-          slot-name: 'production'
+          app-name: 'books-data-api'
+          slot-name: 'books-data-api'
           publish-profile: ${{ secrets.BACKEND_API }}
           package: .
