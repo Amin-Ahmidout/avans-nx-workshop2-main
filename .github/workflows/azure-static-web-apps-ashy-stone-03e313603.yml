@@ -98,5 +98,5 @@ jobs:
               with:
                   app-name: 'books-data-api'
                   slot-name: 'production'
-                  publish-profile: ${{ secrets.BACKEND_API }}
+                  publish-profile: ${{ secrets.NEXTJS_PUBLISHPROFILE }}
                   package: .
