@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy a Node.js app and an Angular app to an Azure
+name: Build and deploy a Node.js app and an Angular app to Azure
 
 on:
     push:
@@ -25,6 +22,7 @@ jobs:
               run: |
                   npm install
                   npm run build --if-present
+                  # Uncomment tests if needed
                   # npm run test --if-present
 
             - name: Zip artifacts for deployment
@@ -59,19 +57,23 @@ jobs:
                   name: my-app
 
             - name: Unzip artifact for deployment
-              run: unzip my-app-release.zip
+              run: |
+                  unzip my-app-release.zip -d output
 
-            - name: Deploy to static azure web app
+            - name: Debug artifact contents
+              run: |
+                  echo "Contents of output directory:"
+                  ls -R output
+
+            - name: Deploy to static Azure web app
               id: builddeploy
               uses: Azure/static-web-apps-deploy@v1
               with:
                   azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ASHY_STONE_03E313603 }}
-                  repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
                   action: 'upload'
-                  app_location: '/' # App source code path
-                  api_location: '' # Api source code path - optional
-                  output_location: 'dist/apps/my-app' # Built app content directory - optional
-                  
+                  app_location: 'output' # Verwijst naar de uitgepakte artifact locatie
+                  api_location: '' # Geen API in deze stap
+                  output_location: '' # Output wordt direct in output-mappen geplaatst
 
     deploy-data-api:
         runs-on: ubuntu-latest
@@ -88,10 +90,18 @@ jobs:
                   name: data-api
 
             - name: Unzip artifact for deployment
-              run: unzip data-api-release.zip
+              run: |
+                  unzip data-api-release.zip -d data-api-output
+
+            - name: Debug artifact contents
+              run: |
+                  echo "Contents of data-api-output directory:"
+                  ls -R data-api-output
 
             - name: Install dependencies
-              run: npm install
+              run: |
+                  cd data-api-output
+                  npm install
 
             - name: 'Deploy to Azure Web App'
               id: deploy-to-webapp
@@ -100,4 +110,4 @@ jobs:
                   app-name: 'books-data-api'
                   slot-name: 'production'
                   publish-profile: ${{ secrets.BACKEND_API }}
-                  package: .
+                  package: data-api-output # Verwijst naar de uitgepakte artifact locatie
