@@ -1,114 +1,102 @@
-name: Build and deploy Angular frontend en NestJS backend naar Azure
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy a Node.js app and an Angular app to an Azure
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    name: Build en zip Angular en NestJS apps
-    steps:
-      # Stap 1: Checkout repository
-      - uses: actions/checkout@v4
+    build:
+        runs-on: ubuntu-latest
+        name: Build and zip apps from /dist
+        steps:
+            - uses: actions/checkout@v4
 
-      # Stap 2: Set up Node.js omgeving
-      - name: Set up Node.js versie
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18.x'
+            - name: Set up Node.js version
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '18.x'
 
-      # Stap 3: Install dependencies en build beide apps
-      - name: Installeren, builden en testen van Angular en NestJS
-        run: |
-          npm install
-          npm run build --if-present
-          echo "Frontend en backend build voltooid."
+            - name: npm install, build, and test
+              run: |
+                  npm install
+                  npm run build --if-present
+                  # npm run test --if-present
 
-      # Stap 4: Zip Angular app
-      - name: Zip Angular frontend artifacts
-        run: |
-          cd ${GITHUB_WORKSPACE}/dist/apps/my-app && zip -r ${GITHUB_WORKSPACE}/my-app-release.zip .
-        shell: bash
+            - name: Zip artifacts for deployment
+              run: |
+                  echo ${GITHUB_WORKSPACE}
+                  cd ${GITHUB_WORKSPACE}/dist/apps/data-api/ && zip ${GITHUB_WORKSPACE}/data-api-release.zip ./* -r
+                  cd ${GITHUB_WORKSPACE}/dist/apps/my-app/ && zip ${GITHUB_WORKSPACE}/my-app-release.zip ./* -r
 
-      # Stap 5: Zip NestJS backend
-      - name: Zip NestJS backend artifacts
-        run: |
-          cd ${GITHUB_WORKSPACE}/dist/apps/data-api && zip -r ${GITHUB_WORKSPACE}/data-api-release.zip .
-        shell: bash
+            - name: Upload my-app artifact for deployment job
+              uses: actions/upload-artifact@v4
+              with:
+                  name: my-app
+                  path: my-app-release.zip
 
-      # Stap 6: Upload artifacts
-      - name: Upload Angular artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: my-app
-          path: my-app-release.zip
+            - name: Upload data-api artifact for deployment job
+              uses: actions/upload-artifact@v4
+              with:
+                  name: data-api
+                  path: data-api-release.zip
 
-      - name: Upload NestJS artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: data-api
-          path: data-api-release.zip
+    deploy-my-app:
+        runs-on: ubuntu-latest
+        name: Deploy Angular Frontend
+        needs: build
+        environment:
+            name: 'Production'
 
-  deploy-my-app:
-    runs-on: ubuntu-latest
-    name: Deploy Angular frontend naar Azure Static Web Apps
-    needs: build
-    environment:
-      name: 'Production'
-    steps:
-      # Stap 1: Download Angular artifact
-      - name: Download Angular artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: my-app
+        steps:
+            - name: Download artifact from build job
+              uses: actions/download-artifact@v4
+              with:
+                  name: my-app
 
-      # Stap 2: Unzip Angular artifact
-      - name: Unzip Angular artifact
-        run: unzip my-app-release.zip -d dist
+            - name: Unzip artifact for deployment
+              run: unzip my-app-release.zip
 
-      # Stap 3: Valideer bestanden
-      - name: Controleer bestanden in dist map
-        run: ls -R dist
+            - name: Deploy to static azure web app
+              id: builddeploy
+              uses: Azure/static-web-apps-deploy@v1
+              with:
+                  azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ASHY_STONE_03E313603 }}
+                  repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+                  action: 'upload'
+                  app_location: '/' # App source code path
+                  output_location: 'dist/apps/my-app' # Built app content directory - optional
+                  
 
-      # Stap 4: Deploy naar Azure Static Web Apps
-      - name: Deploy naar Azure Static Web Apps
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ASHY_STONE_03E313603 }}
-          action: 'upload'
-          app_location: '/'
-          api_location: ''
-          output_location: '.'
+    deploy-data-api:
+        runs-on: ubuntu-latest
+        name: Deploy NestJs data-api backend
+        needs: build
+        environment:
+            name: 'Production'
+            url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
-  deploy-data-api:
-    runs-on: ubuntu-latest
-    name: Deploy NestJS backend naar Azure Web Apps
-    needs: build
-    environment:
-      name: 'Production'
-    steps:
-      # Stap 1: Download NestJS artifact
-      - name: Download NestJS artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: data-api
+        steps:
+            - name: Download artifact from build job
+              uses: actions/download-artifact@v4
+              with:
+                  name: data-api
 
-      # Stap 2: Unzip NestJS artifact
-      - name: Unzip NestJS artifact
-        run: unzip data-api-release.zip -d backend
+            - name: Unzip artifact for deployment
+              run: unzip data-api-release.zip
 
-      # Stap 3: Valideer bestanden
-      - name: Controleer bestanden in backend map
-        run: ls -R backend
+            - name: Install dependencies
+              run: npm install
 
-      # Stap 4: Deploy naar Azure Web App
-      - name: Deploy naar Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'books-data-api' # Naam van je Azure Web App
-          slot-name: 'production'   # Slot waarin je wilt deployen
-          publish-profile: ${{ secrets.BACKEND_API }}
-          package: backend
+            - name: 'Deploy to Azure Web App'
+              id: deploy-to-webapp
+              uses: azure/webapps-deploy@v3
+              with:
+                  app-name: 'books-data-api'
+                  slot-name: 'production'
+                  publish-profile: ${{ secrets.BACKEND_API }}
+                  package: .
