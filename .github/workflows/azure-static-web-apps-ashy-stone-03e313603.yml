@@ -76,3 +76,4 @@ jobs:
           slot-name: 'production' # Optional: Use if deploying to a specific slot
           publish-profile: ${{ secrets.NEXTJS_PUBLISHPROFILE }} # Add publish profile secret
           package: 'dist/apps/data-api'
+          
