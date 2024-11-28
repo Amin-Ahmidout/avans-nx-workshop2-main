@@ -38,7 +38,7 @@ async function bootstrap() {
         // app.useGlobalFilters(new HttpExceptionFilter());
         // Logger.log('HTTP Exception filter is enabled.');
 
-        const port = process.env.PORT || 8080;
+        const port = process.env.PORT || 3000;
         await app.listen(port);
         Logger.log(`🚀 DATA-API server is running on: http://localhost:${port}/${globalPrefix}`);
     } catch (error) {
