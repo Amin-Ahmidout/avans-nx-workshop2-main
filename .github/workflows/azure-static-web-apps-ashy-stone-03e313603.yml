@@ -1,79 +1,102 @@
-name: Azure Static Web Apps CI/CD
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy a Node.js app and an Angular app to an Azure
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-      - main
+    push:
+        branches:
+            - main
+    workflow_dispatch:
 
 jobs:
-  build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
-    runs-on: ubuntu-latest
-    name: Build and Deploy Job
-    permissions:
-       id-token: write
-       contents: read
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true
-          lfs: false
-      - name: Install OIDC Client from Core Package
-        run: npm install @actions/core@1.6.0 @actions/http-client
-      - name: Get Id Token
-        uses: actions/github-script@v6
-        id: idtoken
-        with:
-           script: |
-               const coredemo = require('@actions/core')
-               return await coredemo.getIDToken()
-           result-encoding: string
-      - name: Build Angular App
-        run: |
-          npm install
-          npm run build --if-present
-      - name: Deploy Angular Frontend
-        id: builddeploy
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ASHY_STONE_03E313603 }}
-          action: "upload"
-          app_location: "dist/apps/my-app" # Built app content directory
-          api_location: "" # No API location for frontend
-          output_location: "dist/apps/my-app"
-          github_id_token: ${{ steps.idtoken.outputs.result }}
+    build:
+        runs-on: ubuntu-latest
+        name: Build and zip apps from /dist
+        steps:
+            - uses: actions/checkout@v4
 
-  deploy_backend_job:
-    runs-on: ubuntu-latest
-    name: Deploy NestJS Backend
-    needs: build_and_deploy_job
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18.x'
-      - name: Install Dependencies
-        run: |
-          cd apps/data-api
-          npm install
-      - name: Build NestJS Backend
-        run: |
-          cd apps/data-api
-          npm run build
-      - name: Zip Backend Files
-        run: |
-          cd dist/apps/data-api
-          zip -r ../../data-api.zip .
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'books-data-api' # Replace with your Azure Web App name
-          slot-name: 'production' # Optional: Use if deploying to a specific slot
-          publish-profile: ${{ secrets.NEXTJS_PUBLISHPROFILE }} # Add publish profile secret
-          package: 'dist/apps/data-api'
-          
+            - name: Set up Node.js version
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '18.x'
+
+            - name: npm install, build, and test
+              run: |
+                  npm install
+                  npm run build --if-present
+                  # npm run test --if-present
+
+            - name: Zip artifacts for deployment
+              run: |
+                  echo ${GITHUB_WORKSPACE}
+                  cd ${GITHUB_WORKSPACE}/dist/apps/data-api/ && zip ${GITHUB_WORKSPACE}/data-api-release.zip ./* -r
+                  cd ${GITHUB_WORKSPACE}/dist/apps/my-app/ && zip ${GITHUB_WORKSPACE}/my-app-release.zip ./* -r
+
+            - name: Upload my-app artifact for deployment job
+              uses: actions/upload-artifact@v4
+              with:
+                  name: my-app
+                  path: my-app-release.zip
+
+            - name: Upload data-api artifact for deployment job
+              uses: actions/upload-artifact@v4
+              with:
+                  name: data-api
+                  path: data-api-release.zip
+
+    deploy-my-app:
+        runs-on: ubuntu-latest
+        name: Deploy Angular Frontend
+        needs: build
+        environment:
+            name: 'Production'
+
+        steps:
+            - name: Download artifact from build job
+              uses: actions/download-artifact@v4
+              with:
+                  name: my-app
+
+            - name: Unzip artifact for deployment
+              run: unzip my-app-release.zip
+
+            - name: Deploy to static azure web app
+              id: builddeploy
+              uses: Azure/static-web-apps-deploy@v1
+              with:
+                  azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ASHY_STONE_03E313603 }}
+                  repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+                  action: 'upload'
+                  app_location: '/' # App source code path
+                  output_location: 'dist/apps/my-app' # Built app content directory - optional
+                  
+
+    deploy-data-api:
+        runs-on: ubuntu-latest
+        name: Deploy NestJs data-api backend
+        needs: build
+        environment:
+            name: 'Production'
+            url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+        steps:
+            - name: Download artifact from build job
+              uses: actions/download-artifact@v4
+              with:
+                  name: data-api
+
+            - name: Unzip artifact for deployment
+              run: unzip data-api-release.zip
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: 'Deploy to Azure Web App'
+              id: deploy-to-webapp
+              uses: azure/webapps-deploy@v3
+              with:
+                  app-name: 'books-data-api'
+                  slot-name: 'production'
+                  publish-profile: ${{ secrets.NEXTJS_PUBLISHPROFILE }}
+                  package: .
