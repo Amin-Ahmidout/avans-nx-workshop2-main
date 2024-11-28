@@ -3,8 +3,8 @@ import { IEnvironment } from './environment.interface';
 export const environment: IEnvironment = {
     production: false,
 
-    ROOT_DOMAIN_URL: 'http://localhost:3000',
-    dataApiUrl: 'http://localhost:3000/api',
+    ROOT_DOMAIN_URL: 'https://book-data-api.azurewebsites.net/',
+    dataApiUrl: 'https://book-data-api.azurewebsites.net/api',
 
-    MONGO_DB_CONNECTION_STRING: 'mongodb://localhost:27017/BookDb'
+    MONGO_DB_CONNECTION_STRING: 'mongodb+srv://admin:Admin123!@cluster0.pkmgh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 };
