@@ -3,6 +3,7 @@ import {
     IsString,
     isString,
     IsOptional,
+    IsNumberString,
 } from 'class-validator';
 import {
     ICreateBook,
@@ -25,10 +26,10 @@ export class CreateBookDto implements ICreateBook {
     description!: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty()   
     genre!: BookGenre;
 
-    @IsString()
+    @IsNumberString()
     @IsOptional() // Publicatiedatum optioneel maken
     publicationYear?: string;
 

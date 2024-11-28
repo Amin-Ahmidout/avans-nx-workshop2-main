@@ -79,7 +79,7 @@ export class BookService {
         if (
             updateBookDto.publicationYear &&
             (typeof updateBookDto.publicationYear !== 'string' || isNaN(Number(updateBookDto.publicationYear)))
-        ) {
+        )    {
             throw new HttpException('Publication year must be a valid string representing a year', 400);
         }
 
