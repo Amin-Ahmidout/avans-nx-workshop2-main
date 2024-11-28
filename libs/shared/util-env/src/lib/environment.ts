@@ -6,5 +6,5 @@ export const environment: IEnvironment = {
     ROOT_DOMAIN_URL: 'https://book-data-api.azurewebsites.net/',
     dataApiUrl: 'https://book-data-api.azurewebsites.net/api',
 
-    MONGO_DB_CONNECTION_STRING: 'mongodb+srv://admin:Admin123!@cluster0.pkmgh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+    MONGO_DB_CONNECTION_STRING: 'mongodb+srv://admin:Admin123!@cluster0.pkmgh.mongodb.net/BookDb?retryWrites=true&w=majority&appName=Cluster0'
 };
