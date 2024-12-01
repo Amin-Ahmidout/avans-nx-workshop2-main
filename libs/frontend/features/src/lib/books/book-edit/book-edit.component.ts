@@ -56,29 +56,32 @@ export class BookEditComponent implements OnInit {
   // Formulier verzenden
   submitForm(): void {
     if (this.bookForm.valid) {
-      // Payload voorbereiden
-      const updatedBook = {
-        ...this.bookForm.value,
-        publicationYear: this.bookForm.value.publicationYear.toString(), // Zorg dat publicationYear een string is
-      };
-  
-      console.log('Updated Book Data being sent to backend:', updatedBook); // Debugging
-  
-      // Verzend het boek naar de backend
-      this.bookService.updateBook(this.bookId, updatedBook).subscribe({
-        next: () => {
-          console.log('Book updated successfully!');
-          this.router.navigate(['/books']); // Redirect naar de boekenlijst
-        },
-        error: (err) => {
-          this.errorMessage = 'Error updating book.';
-          console.error(err); // Fout loggen
-        },
-      });
+        const updatedBook = {
+            ...this.bookForm.value,
+            publicationYear: this.bookForm.value.publicationYear.toString(),
+        };
+
+        this.bookService.updateBook(this.bookId, updatedBook).subscribe({
+            next: () => {
+                console.log('Book updated successfully!');
+                this.router.navigate(['/books']);
+            },
+            error: (err) => {
+                if (err.status === 403) {
+                    this.errorMessage = 'You are not authorized to update this book.';
+                } else if (err.status === 404) {
+                    this.errorMessage = 'Book not found.';
+                } else {
+                    this.errorMessage = 'An error occurred while updating the book.';
+                }
+                console.error('Error details:', err);
+            },
+        });
     } else {
-      this.errorMessage = 'Please fill out all required fields.';
+        this.errorMessage = 'Please fill out all required fields.';
     }
-  }
+}
+
   
   
   

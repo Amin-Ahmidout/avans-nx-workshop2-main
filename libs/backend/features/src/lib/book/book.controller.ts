@@ -49,18 +49,15 @@ export class BookController {
     }
 
     @Put(':id')
+    @UseGuards(AuthGuard)
     async updateBook(
         @Param('id') id: string,
-        @Body() updateBookDto: UpdateBookDto
+        @Body() updateBookDto: UpdateBookDto,
+        @Request() req: any
     ): Promise<IBook | null> {
-        console.log('Received UpdateBookDto:', updateBookDto); // Log de data
-        const updatedBook = await this.bookService.updateBook(
-            id,
-            updateBookDto
+        this.logger.log(
+            `User ${req.user.user_id} attempting to update book with ID ${id}`
         );
-        if (!updatedBook) {
-            throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
-        }
-        return updatedBook;
+        return this.bookService.updateBook(id, updateBookDto, req.user.user_id);
     }
 }

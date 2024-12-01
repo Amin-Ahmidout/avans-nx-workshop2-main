@@ -2,6 +2,10 @@
   <h1 class="mb-4">Edit Book</h1>
   <form *ngIf="bookForm" [formGroup]="bookForm" (ngSubmit)="submitForm()">
     <div class="mb-3">
+      <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+    </div>
+
       <label for="title" class="form-label">Title</label>
       <input
         type="text"

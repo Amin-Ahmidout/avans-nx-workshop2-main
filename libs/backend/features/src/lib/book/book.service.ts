@@ -1,4 +1,4 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Book as BookModel, BookDocument } from './book.schema';
@@ -75,26 +75,30 @@ export class BookService {
      * @param updateBookDto Boekgegevens die geüpdatet moeten worden
      * @returns Geüpdatet boek of null als niet gevonden
      */
-    async updateBook(id: string, updateBookDto: UpdateBookDto): Promise<IBook | null> {
-        if (
-            updateBookDto.publicationYear &&
-            (typeof updateBookDto.publicationYear !== 'string' || isNaN(Number(updateBookDto.publicationYear)))
-        )    {
-            throw new HttpException('Publication year must be a valid string representing a year', 400);
+    async updateBook(id: string, updateBookDto: UpdateBookDto, userId: string): Promise<IBook | null> {
+        // Zoek het boek op basis van ID
+        const book = await this.bookModel.findById(id).exec();
+    
+        // Controleer of het boek bestaat
+        if (!book) {
+            throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
         }
-
+    
+        // Controleer of de ingelogde gebruiker de eigenaar is van het boek
+        if (book.addedBy?.user_id?.toString() !== userId.toString()) {
+            throw new HttpException('You are not authorized to update this book', HttpStatus.FORBIDDEN);
+        }
+    
+        // Update het boek als de controle slaagt
         const updatedBook = await this.bookModel.findByIdAndUpdate(id, updateBookDto, {
-            new: true, // Return the updated document
+            new: true, // Retourneer het geüpdatete document
         }).exec();
-
-        if (!updatedBook) {
-            this.logger.warn(`Book with ID ${id} not found`);
-            return null;
-        }
-
-        this.logger.log(`Book with ID ${id} successfully updated`);
+    
         return updatedBook;
     }
+    
+    
+    
 
     /**
      * Verwijder een boek op basis van ID
