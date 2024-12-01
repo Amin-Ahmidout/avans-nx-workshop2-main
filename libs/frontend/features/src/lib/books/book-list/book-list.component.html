@@ -5,6 +5,10 @@
       Add New Book
     </button>
   </div>
+  <div *ngIf="errorMessage" class="alert alert-danger text-center">
+    {{ errorMessage }}
+  </div>
+
 
   <div *ngIf="books && books.length > 0; else noBooks" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     <div class="col" *ngFor="let book of books">

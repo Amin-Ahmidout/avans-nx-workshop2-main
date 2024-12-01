@@ -37,7 +37,11 @@ export class BookController {
     }
 
     @Delete(':id')
-    async delete(@Param('id') id: string): Promise<void> {
+    @UseGuards(AuthGuard)
+    async delete(@Param('id') id: string, @Request() req: any): Promise<void> {
+        this.logger.log(
+            `User ${req.user?.user_id} attempting to delete book with id ${id}`
+        );
         const success = await this.bookService.deleteBookById(id);
         if (!success) {
             throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
