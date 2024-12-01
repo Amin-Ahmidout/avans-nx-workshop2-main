@@ -1,5 +1,8 @@
 <div class="container mt-4">
     <h1 class="mb-4">Add New Book</h1>
+    <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
     <form [formGroup]="bookForm" (ngSubmit)="submitForm()">
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>

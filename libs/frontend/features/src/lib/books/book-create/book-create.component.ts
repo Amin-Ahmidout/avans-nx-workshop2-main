@@ -34,14 +34,18 @@ export class BookCreateComponent implements OnInit {
             ...this.bookForm.value,
             publicationYear: String(this.bookForm.value.publicationYear), // Zorg dat het een string is
         };
-        console.log('Submitting form:', formData); // Debug logging
+
         this.bookService.createBook(formData).subscribe({
             next: () => {
                 console.log('Book created successfully!');
                 this.router.navigate(['/books']);
             },
             error: (err) => {
-                this.errorMessage = 'Error creating book.';
+                if (err.status === 401) {
+                    this.errorMessage = 'You must be logged in to create a book.';
+                } else {
+                    this.errorMessage = 'An error occurred while creating the book.';
+                }
                 console.error('Error details:', err); // Log de volledige fout
             },
         });
@@ -50,5 +54,7 @@ export class BookCreateComponent implements OnInit {
     }
 }
 
-  
 }
+
+  
+
