@@ -26,7 +26,7 @@
           </p>
         </div>
         <div class="card-footer text-end">
-          <small class="text-muted">Added by: {{ book.addedBy?.user_id }}</small>
+          <small class="text-muted">Added by: {{ book.addedBy?.name }}</small>
           <button class="btn btn-danger btn-sm" (click)="deleteBook(book.id)">
             Delete
           </button>
