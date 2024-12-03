@@ -27,6 +27,7 @@
         </div>
         <div class="card-footer text-end">
           <small class="text-muted">Added by: {{ book.addedBy?.name }}</small>
+          <button class="btn btn-sm btn-success" (click)="addToFavorites(book.id)">Add to Favorites</button>
           <button class="btn btn-danger btn-sm" (click)="deleteBook(book.id)">
             Delete
           </button>

@@ -26,6 +26,32 @@ export class BookListComponent implements OnInit {
         });
     }
 
+    addToFavorites(bookId: string): void {
+      const userId = localStorage.getItem('userId'); // Neem aan dat je userId opslaat na login
+      console.log('UserId in localStorage:', localStorage.getItem('userId'));
+
+      if (!userId) {
+          this.errorMessage = 'You must be logged in to add books to favorites.';
+          return;
+      }
+  
+      this.bookService.addBookToFavorites(userId, bookId).subscribe({
+          next: () => {
+              alert('Book added to favorites!');
+          },
+          error: (err) => {
+              if (err.status === 400) {
+                  this.errorMessage = 'Book is already in favorites.';
+              } else if (err.status === 404) {
+                  this.errorMessage = 'Book or user not found.';
+              } else {
+                  this.errorMessage = 'An error occurred while adding the book to favorites.';
+              }
+              console.error(err);
+          },
+      });
+  }
+  
     deleteBook(id: string): void {
       if (confirm('Are you sure you want to delete this book?')) {
           this.bookService.deleteBook(id).subscribe({

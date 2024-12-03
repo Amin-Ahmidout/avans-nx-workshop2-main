@@ -12,6 +12,7 @@ import { AuthService } from './auth/auth.service';
 import { BookListComponent } from './books/book-list/book-list.component';
 import { BookCreateComponent } from './books/book-create/book-create.component';
 import { BookEditComponent } from './books/book-edit/book-edit.component';
+import { FavoritesComponent } from './books/book-favourite/favorites-component';
 
 @NgModule({
     imports: [CommonModule, RouterModule,ReactiveFormsModule, HttpClientModule  ],
@@ -22,7 +23,8 @@ import { BookEditComponent } from './books/book-edit/book-edit.component';
         ColumnsComponent,
         BookListComponent,
         BookCreateComponent,
-        BookEditComponent
+        BookEditComponent,
+        FavoritesComponent
     ],
     providers:[
         UserService,
@@ -32,7 +34,8 @@ import { BookEditComponent } from './books/book-edit/book-edit.component';
         // Exporteer de componenten zodat ze elders gebruikt kunnen worden
         BookListComponent,
         BookCreateComponent,
-        BookEditComponent
+        BookEditComponent,
+        FavoritesComponent
       ],
 })
 export class FeaturesModule {}

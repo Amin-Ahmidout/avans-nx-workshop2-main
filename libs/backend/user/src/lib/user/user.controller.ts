@@ -11,9 +11,10 @@ import {
     UseGuards
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { IUserInfo, IUser } from '@avans-nx-workshop/shared/api';
+import { IUserInfo, IUser, IBook } from '@avans-nx-workshop/shared/api';
 import { CreateUserDto, UpdateUserDto } from '@avans-nx-workshop/backend/dto';
 import { UserExistGuard } from './user-exists.guard';
+import { AuthGuard } from 'libs/backend/auth/src/lib/auth/auth.guards';
 
 @Controller('user')
 export class UserController {
@@ -43,12 +44,12 @@ export class UserController {
     }
 
     @Delete(':id')
-  async delete(@Param('id') id: string): Promise<void> {
-    const success = await this.userService.deleteUserById(id);
-    if (!success) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    async delete(@Param('id') id: string): Promise<void> {
+        const success = await this.userService.deleteUserById(id);
+        if (!success) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
     }
-  }
 
     @Put(':id')
     update(
@@ -58,4 +59,24 @@ export class UserController {
         return this.userService.update(id, user);
     }
 
+    @Post(':id/favorites')
+    // @UseGuards(AuthGuard)
+    async addFavorite(
+        @Param('id') userId: string,
+        @Body('bookId') bookId: string
+    ): Promise<IUserInfo> {
+        return this.userService.addBookToFavorites(userId, bookId);
+    }
+
+    @Get(':id/favorites')
+    async getFavorites(@Param('id') userId: string): Promise<IBook[]> {
+        try {
+            return await this.userService.getFavorites(userId);
+        } catch (error) {
+            if (error instanceof Error) {
+                throw new HttpException(error.message, (error as any).status || HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            throw new HttpException('Unknown error', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

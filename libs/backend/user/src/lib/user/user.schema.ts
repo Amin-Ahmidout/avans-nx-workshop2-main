@@ -70,6 +70,14 @@ export class User implements IUser {
     })
     isActive = true;
 
+    @Prop({
+        type: [MongooseSchema.Types.ObjectId],
+        ref: 'Book', // Verwijst naar de `Book` collectie
+        default: []
+    })
+    favoriteBooks!: (IBook | string)[];
+    
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

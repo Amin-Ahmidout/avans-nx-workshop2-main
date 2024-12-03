@@ -3,6 +3,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Book as BookModel, BookDocument } from './book.schema';
 import { IBook } from '@avans-nx-workshop/shared/api';
+import { IUserInfo } from '@avans-nx-workshop/shared/api';
 import { CreateBookDto, UpdateBookDto } from '@avans-nx-workshop/backend/dto';
 import {
     UserDocument,
@@ -97,7 +98,20 @@ export class BookService {
         return updatedBook;
     }
     
+    async addBookToFavorites(userId: string, bookId: string): Promise<IUserInfo> {
+        const user = await this.userModel.findById(userId);
+        if (!user) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
     
+        if (user.favoriteBooks.includes(bookId)) {
+            throw new HttpException('Book is already in favorites', HttpStatus.BAD_REQUEST);
+        }
+    
+        user.favoriteBooks.push(bookId);
+        await user.save();
+        return user;
+    }
     
 
     /**

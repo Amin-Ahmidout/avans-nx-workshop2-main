@@ -1,8 +1,8 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User as UserModel, UserDocument } from './user.schema';
-import { IUser, IUserInfo } from '@avans-nx-workshop/shared/api';
+import { IBook, IUser, IUserInfo } from '@avans-nx-workshop/shared/api';
 // import { Meal, MealDocument } from '@avans-nx-workshop/backend/features';
 import { CreateUserDto, UpdateUserDto } from '@avans-nx-workshop/backend/dto';
 
@@ -100,5 +100,39 @@ export class UserService {
         this.logger.log(`Found user: ${JSON.stringify(user)}`);
         return user;
     }
+    
+    async addBookToFavorites(userId: string, bookId: string): Promise<IUserInfo> {
+        const user = await this.userModel.findById(userId);
+        if (!user) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+    
+        if (user.favoriteBooks.includes(bookId)) {
+            throw new HttpException('Book is already in favorites', HttpStatus.BAD_REQUEST);
+        }
+    
+        user.favoriteBooks.push(bookId);
+        await user.save();
+        return user;
+    }
+
+    async getFavorites(userId: string): Promise<IBook[]> {
+        if (!Types.ObjectId.isValid(userId)) {
+            throw new HttpException('Invalid user ID format', HttpStatus.BAD_REQUEST);
+        }
+    
+        const user = await this.userModel
+            .findById(userId)
+            .populate('favoriteBooks') // Populeert de favorieten
+            .exec();
+    
+        if (!user) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+    
+        // Cast de data naar IBook[] als het veld correct is gepopuleerd
+        return user.favoriteBooks as IBook[];
+    }
+    
     
 }

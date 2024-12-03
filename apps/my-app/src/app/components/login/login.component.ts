@@ -18,8 +18,10 @@ export class LoginComponent {
             next: (response: any) => {
                 const user = response.results; 
                 console.log('Login response:', user);
+
                 if (user.token) {
                     localStorage.setItem('token', user.token);
+                    localStorage.setItem('userId', user._id);
                     this.router.navigate(['/']);
                 } else {
                     console.error('No token returned from login.');
