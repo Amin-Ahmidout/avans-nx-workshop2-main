@@ -1,3 +1,4 @@
+import { UserService } from '../../../../user/src/lib/user/user.service';
 import {
     CanActivate,
     ExecutionContext,
@@ -12,7 +13,7 @@ import { Request } from 'express';
 export class AuthGuard implements CanActivate {
     private readonly logger = new Logger(AuthGuard.name);
 
-    constructor(private jwtService: JwtService) {}
+    constructor(private jwtService: JwtService, private userService: UserService) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
@@ -28,7 +29,23 @@ export class AuthGuard implements CanActivate {
             this.logger.log('payload', payload);
             // 💡 We're assigning the payload to the request object here
             // so that we can access it in our route handlers
-            request['user'] = payload;
+            
+            const user = await this.userService.findOne(payload.user_id);
+
+            
+            if (!user) {
+                this.logger.error(`User with ID ${payload.user_id} not found`);
+                throw new UnauthorizedException('User not found');
+            }
+
+
+            request['user'] = {
+                user_id: user._id,
+                name: user.name,
+                emailAddress: user.emailAddress,
+                profileImgUrl: user.profileImgUrl,
+                role: user.role,
+            };
         } catch {
             throw new UnauthorizedException();
         }

@@ -79,5 +79,26 @@ export class UserService {
         return updatedUser;
     }
     
+    async findById(id: string): Promise<IUserInfo | null> {
+        this.logger.log(`Finding user by ID: ${id}`);
+    
+        // Valideer of het ID-formaat correct is
+        if (!Types.ObjectId.isValid(id)) {
+            this.logger.error(`Invalid ObjectId format: ${id}`);
+            throw new HttpException('Invalid ID format', 400);
+        }
+    
+        // Zoek de gebruiker op in de database
+        const user = await this.userModel.findById(new Types.ObjectId(id)).select('-password').exec();
+    
+        // Controleer of de gebruiker gevonden is
+        if (!user) {
+            this.logger.error(`User with ID ${id} not found`);
+            throw new HttpException(`User with ID ${id} not found`, 404);
+        }
+    
+        this.logger.log(`Found user: ${JSON.stringify(user)}`);
+        return user;
+    }
     
 }

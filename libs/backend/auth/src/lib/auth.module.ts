@@ -4,6 +4,7 @@ import { AuthController } from './auth/auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { User, UserSchema, UsersModule } from '@avans-nx-workshop/backend/user';
 import { AuthService } from './auth/auth.service';
+import { UserService } from '../../../user/src/lib/user/user.service';
 
 @Module({
     imports: [
@@ -15,7 +16,7 @@ import { AuthService } from './auth/auth.service';
         })
     ],
     controllers: [AuthController],
-    providers: [AuthService],
-    exports: [AuthService]
+    providers: [AuthService, UserService],
+    exports: [AuthService, UserService],
 })
 export class AuthModule {}

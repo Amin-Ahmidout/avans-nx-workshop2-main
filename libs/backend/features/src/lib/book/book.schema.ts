@@ -22,8 +22,19 @@ export class Book implements IBook {
     @Prop({ required: true, enum: BookGenre, type: String })
     genre!: BookGenre;
 
-    @Prop({ required: true, type: Object })
+    @Prop({
+        required: true,
+        type: {
+            user_id: String,
+            name: String,
+            emailAddress: String,
+            profileImgUrl: { type: String, required: false },
+            role: String,
+            token: { type: String, required: false },
+        },
+    })
     addedBy!: IUserIdentity;
+    
 
     @Prop({ 
         type: String, 

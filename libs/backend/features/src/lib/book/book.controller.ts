@@ -32,7 +32,7 @@ export class BookController {
     @Post('')
     @UseGuards(AuthGuard)
     create(@Request() req: any): Promise<IBook | null> {
-        this.logger.log('req.user.user_id = ', req.user.user_id);
+        this.logger.log('req.user = ', req.user); // Log de volledige inhoud van req.user
         return this.bookService.create(req);
     }
 
