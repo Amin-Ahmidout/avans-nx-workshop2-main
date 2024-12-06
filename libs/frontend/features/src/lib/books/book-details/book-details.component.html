@@ -1,0 +1,64 @@
+<div class="container mt-4">
+    <!-- Wanneer het boek geladen is -->
+    <div *ngIf="book !== null">
+        <h1>{{ book?.title }}</h1>
+        <p><strong>Author:</strong> {{ book?.author }}</p>
+        <p><strong>Description:</strong> {{ book?.description }}</p>
+        <p><strong>Genre:</strong> {{ book?.genre }}</p>
+        <p><strong>Publication Year:</strong> {{ book?.publicationYear }}</p>
+    </div>
+    
+    <!-- Wanneer het boek nog niet geladen is -->
+    <div *ngIf="book === null">
+        <p>Loading book details...</p>
+    </div>
+
+
+      
+
+    <hr />
+
+    <h2>Reviews</h2>
+    <div *ngIf="reviews.length > 0; else noReviews">
+        <div *ngFor="let review of reviews" class="card mb-3">
+            <div class="card-body">
+                <p><strong>Rating:</strong> {{ review.rating }}/5</p>
+                <p>{{ review.comment }}</p>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #noReviews>
+        <p>No reviews yet. Be the first to leave a review!</p>
+    </ng-template>
+
+    <hr />
+
+    <h3>Leave a Review</h3>
+    <form (ngSubmit)="submitReview()">
+        <div class="mb-3">
+            <label for="rating" class="form-label">Rating (1-5)</label>
+            <input
+                type="number"
+                [(ngModel)]="review.rating"
+                name="rating"
+                id="rating"
+                class="form-control"
+                min="1"
+                max="5"
+                required
+            />
+        </div>
+        <div class="mb-3">
+            <label for="comment" class="form-label">Comment</label>
+            <textarea
+                [(ngModel)]="review.comment"
+                name="comment"
+                id="comment"
+                class="form-control"
+                required
+            ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+    </form>
+</div>

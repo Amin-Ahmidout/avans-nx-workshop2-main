@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IBook, ICreateBook } from '@avans-nx-workshop/shared/api';
 import { environment } from '../../../../../../libs/shared/util-env/src/lib/environment';
+import { Review } from 'libs/backend/features/src/lib/book/book.schema';
 
 @Injectable({
     providedIn: 'root'
@@ -54,6 +55,19 @@ export class BookService {
         const url = `${environment.dataApiUrl}/user/${userId}/favorites`;
         return this.http.get<IBook[]>(url, { headers: this.getAuthHeaders() });
     }
+
+    addReview(bookId: string, review: { comment: string; rating: number }): Observable<void> {
+        return this.http.post<void>(`${this.apiUrl}/${bookId}/reviews`, review, {
+            headers: this.getAuthHeaders()
+        });
+    }
+    
+    getReviews(bookId: string): Observable<Review[]> {
+        return this.http.get<Review[]>(`${this.apiUrl}/${bookId}/reviews`, {
+            headers: this.getAuthHeaders()
+        });
+    }
+    
     
     private getAuthHeaders(): HttpHeaders {
         const token = localStorage.getItem('token'); // Haal de token uit localStorage

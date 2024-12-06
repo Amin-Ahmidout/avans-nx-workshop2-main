@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Book as BookModel, BookDocument } from './book.schema';
+import { Book as BookModel, BookDocument, Review } from './book.schema';
 import { IBook } from '@avans-nx-workshop/shared/api';
 import { IUserInfo } from '@avans-nx-workshop/shared/api';
 import { CreateBookDto, UpdateBookDto } from '@avans-nx-workshop/backend/dto';
@@ -113,7 +113,28 @@ export class BookService {
         return user;
     }
     
+    async addReview(bookId: string, userId: string, comment: string, rating: number): Promise<IBook> {
+        const book = await this.bookModel.findById(bookId);
 
+        if (!book) {
+            throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
+        }
+
+        book.reviews.push({ userId, comment, rating });
+        await book.save();
+
+        return book;
+    }
+
+    async getReviews(bookId: string): Promise<Review[]> {
+        const book = await this.bookModel.findById(bookId).select('reviews').exec();
+
+        if (!book) {
+            throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
+        }
+
+        return book.reviews;
+    }
     /**
      * Verwijder een boek op basis van ID
      * @param id Boek ID

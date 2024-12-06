@@ -12,6 +12,7 @@ import { Get, Param, Post, Body, UseGuards } from '@nestjs/common';
 import { IBook } from '@avans-nx-workshop/shared/api';
 import { CreateBookDto, UpdateBookDto } from '@avans-nx-workshop/backend/dto';
 import { AuthGuard } from '@avans-nx-workshop/backend/auth';
+import { Review } from './book.schema';
 
 @Controller('book')
 export class BookController {
@@ -59,5 +60,21 @@ export class BookController {
             `User ${req.user.user_id} attempting to update book with ID ${id}`
         );
         return this.bookService.updateBook(id, updateBookDto, req.user.user_id);
+    }
+
+    @Post(':id/reviews')
+    @UseGuards(AuthGuard)
+    async addReview(
+        @Param('id') bookId: string,
+        @Body() body: { comment: string; rating: number },
+        @Request() req: any
+    ): Promise<IBook> {
+        const userId = req.user.user_id;
+        return this.bookService.addReview(bookId, userId, body.comment, body.rating);
+    }
+
+    @Get(':id/reviews')
+    async getReviews(@Param('id') bookId: string): Promise<Review[]> {
+        return this.bookService.getReviews(bookId);
     }
 }

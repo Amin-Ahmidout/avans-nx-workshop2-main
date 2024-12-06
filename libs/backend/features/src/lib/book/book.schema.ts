@@ -1,9 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { BookGenre, IUserIdentity } from '@avans-nx-workshop/shared/api';
 import { IBook } from '@avans-nx-workshop/shared/api';
 
 export type BookDocument = Book & Document;
+
+@Schema()
+export class Review {
+    @Prop({ required: true, type: Types.ObjectId, ref: 'User' }) // Verwijzing naar een gebruiker
+    userId!: string;
+
+    @Prop({ required: true })
+    comment!: string;
+
+    @Prop({ required: true, min: 1, max: 5 })
+    rating!: number; // Bijvoorbeeld een cijfer tussen 1-5
+}
+
+export const ReviewSchema = SchemaFactory.createForClass(Review);
 
 @Schema()
 export class Book implements IBook {
@@ -34,6 +48,12 @@ export class Book implements IBook {
         },
     })
     addedBy!: IUserIdentity;
+
+    @Prop({
+        type: [ReviewSchema], // Een array van Review-subdocumenten
+        default: [],
+    })
+    reviews!: Review[]; // Lijst met reviews
     
 
     @Prop({ 
