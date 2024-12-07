@@ -14,9 +14,18 @@ import { BookCreateComponent } from './books/book-create/book-create.component';
 import { BookEditComponent } from './books/book-edit/book-edit.component';
 import { FavoritesComponent } from './books/book-favourite/favorites-component';
 import { BookDetailsComponent } from './books/book-details/book-details.component';
+import { BookClubService } from './bookclubs/bookclub.service';
+import { CreateBookClubComponent } from './bookclubs/bookclub-create/book-club-create.component';
+import { BookClubListComponent } from './bookclubs/bookclub-list/book-club-list.component';
 
 @NgModule({
-    imports: [CommonModule, RouterModule,ReactiveFormsModule, HttpClientModule, FormsModule  ],
+    imports: [
+        CommonModule,
+        RouterModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        FormsModule
+    ],
     declarations: [
         UserDetailsComponent,
         UserListComponent,
@@ -26,22 +35,27 @@ import { BookDetailsComponent } from './books/book-details/book-details.componen
         BookCreateComponent,
         BookEditComponent,
         FavoritesComponent,
-        BookDetailsComponent
+        BookDetailsComponent,
+        CreateBookClubComponent,
+        BookClubListComponent
     ],
-    providers:[
+    providers: [
         UserService,
-        AuthService
+        AuthService,
+        BookClubService
     ],
     exports: [
-        // Exporteer de componenten zodat ze elders gebruikt kunnen worden
         BookListComponent,
         BookCreateComponent,
         BookEditComponent,
         FavoritesComponent,
-        BookDetailsComponent
-      ],
+        BookDetailsComponent,
+        FormsModule,  // Voeg FormsModule toe
+        ReactiveFormsModule // Voeg ReactiveFormsModule toe
+    ],
 })
 export class FeaturesModule {}
+
 
 
 

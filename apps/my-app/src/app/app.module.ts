@@ -21,7 +21,8 @@ import { RegisterComponent} from './components/register/register.component'
         HeaderComponent,
         FooterComponent,
         LoginComponent,
-        RegisterComponent
+        RegisterComponent,
+        
     ],
     imports: [
         BrowserModule,

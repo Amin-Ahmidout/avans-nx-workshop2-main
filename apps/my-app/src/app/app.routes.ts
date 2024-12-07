@@ -9,6 +9,8 @@ import { BookCreateComponent } from '../../../../libs/frontend/features/src/lib/
 import { BookEditComponent } from '../../../../libs/frontend/features/src/lib/books/book-edit/book-edit.component';
 import { FavoritesComponent } from '../../../../libs/frontend/features/src/lib/books/book-favourite/favorites-component';
 import { BookDetailsComponent } from '../../../../libs/frontend/features/src/lib/books/book-details/book-details.component';
+import { BookClubListComponent } from '../../../../libs/frontend/features/src/lib/bookclubs/bookclub-list/book-club-list.component';
+import { CreateBookClubComponent } from '../../../../libs/frontend/features/src/lib/bookclubs/bookclub-create/book-club-create.component';
 
 export const appRoutes: Route[] = [
     // Hier komen onze URLs te staan.
@@ -29,6 +31,8 @@ export const appRoutes: Route[] = [
     { path: 'books/:id/edit', component: BookEditComponent },
     { path: 'favorites', component: FavoritesComponent },
     {path: 'books/:id', component: BookDetailsComponent},
+    { path: 'book-clubs', component: BookClubListComponent },
+    { path: 'book-clubs/create', component: CreateBookClubComponent },
 
 
     

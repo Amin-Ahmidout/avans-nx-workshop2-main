@@ -1,0 +1,19 @@
+<!-- book-club-list.component.html -->
+<div class="container mt-4">
+    <h1>Book Clubs</h1>
+    <a routerLink="/book-clubs/create" class="btn btn-primary mb-4">Create Book Club</a>
+    <div *ngIf="bookClubs.length > 0; else noBookClubs">
+        <div *ngFor="let club of bookClubs" class="card mb-3">
+            <div class="card-body">
+                <h5>{{ club.name }}</h5>
+                <p>{{ club.description }}</p>
+                <p><strong>Owner:</strong> {{ club.owner.name }}</p>
+                <p><strong>Members:</strong> {{ club.members.length }}</p>
+                <button class="btn btn-sm btn-success" (click)="joinBookClub(club._id)">Join</button>
+            </div>
+        </div>
+    </div>
+    <ng-template #noBookClubs>
+        <p>No book clubs available. Create one!</p>
+    </ng-template>
+</div>

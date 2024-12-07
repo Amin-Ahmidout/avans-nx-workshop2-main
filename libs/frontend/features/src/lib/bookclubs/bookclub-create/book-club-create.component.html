@@ -1,0 +1,16 @@
+<!-- create-book-club.component.html -->
+<div class="container mt-4">
+    <h1>Create Book Club</h1>
+    <form (ngSubmit)="createBookClub()">
+        <div class="mb-3">
+            <label for="name" class="form-label">Book Club Name</label>
+            <input [(ngModel)]="bookClub.name" id="name" name="name" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea [(ngModel)]="bookClub.description" id="description" name="description" class="form-control" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+    
+</div>
