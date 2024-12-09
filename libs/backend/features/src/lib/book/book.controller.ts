@@ -70,7 +70,12 @@ export class BookController {
         @Request() req: any
     ): Promise<IBook> {
         const userId = req.user.user_id;
-        return this.bookService.addReview(bookId, userId, body.comment, body.rating);
+        return this.bookService.addReview(
+            bookId,
+            userId,
+            body.comment,
+            body.rating
+        );
     }
 
     @Get(':id/reviews')

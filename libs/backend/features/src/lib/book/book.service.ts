@@ -144,4 +144,12 @@ export class BookService {
         const result = await this.bookModel.deleteOne({ _id: id }).exec();
         return result.deletedCount > 0;
     }
+
+    async searchBooks(search: string): Promise<IBook[]> {
+        const regex = new RegExp(search, 'i'); // Zoek boeken case-insensitief
+        return this.bookModel
+            .find({ $or: [{ title: regex }, { author: regex }] })
+            .exec();
+    }
+    
 }

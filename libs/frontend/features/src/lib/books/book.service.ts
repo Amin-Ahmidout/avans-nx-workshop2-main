@@ -68,6 +68,14 @@ export class BookService {
         });
     }
     
+    searchBooks(query: string): Observable<IBook[]> {
+        const url = `${this.apiUrl}/search`; // Zorg ervoor dat je backend een endpoint ondersteunt zoals `/search`
+        return this.http.get<IBook[]>(url, {
+            headers: this.getAuthHeaders(),
+            params: { query } // Voeg de zoekparameter toe
+        });
+    }
+    
     
     private getAuthHeaders(): HttpHeaders {
         const token = localStorage.getItem('token'); // Haal de token uit localStorage

@@ -36,37 +36,38 @@ export class BookClubController {
     }
 
     @Post('')
-@UseGuards(AuthGuard)
-async create(
-    @Body() createBookClubDto: CreateBookClubDto,
-    @Request() req: any
-): Promise<BookClub> {
-    const userId = req.user.user_id;
-    this.logger.log(`User ${userId} is creating a new book club`);
-    return this.bookClubService.createBookClub(
-        createBookClubDto.name,
-        createBookClubDto.description,
-        userId
-    );
-}
+    @UseGuards(AuthGuard)
+    async create(
+        @Body() createBookClubDto: CreateBookClubDto,
+        @Request() req: any
+    ): Promise<BookClub> {
+        const userId = req.user.user_id;
+        this.logger.log(`User ${userId} is creating a new book club`);
+        return this.bookClubService.createBookClub(
+            createBookClubDto.name,
+            createBookClubDto.description,
+            userId
+        );
+    }
 
-@Put(':id')
-@UseGuards(AuthGuard)
-async update(
-    @Param('id') bookClubId: string,
-    @Body() body: CreateBookClubDto,
-    @Request() req: any
-): Promise<BookClub | null> {
-    const userId = req.user.user_id;
-    this.logger.log(`User ${userId} is updating book club with ID: ${bookClubId}`);
-    return this.bookClubService.updateBookClub(
-        bookClubId,
-        body.name,
-        body.description,
-        userId
-    );
-}
-
+    @Put(':id')
+    @UseGuards(AuthGuard)
+    async update(
+        @Param('id') bookClubId: string,
+        @Body() body: CreateBookClubDto,
+        @Request() req: any
+    ): Promise<BookClub | null> {
+        const userId = req.user.user_id;
+        this.logger.log(
+            `User ${userId} is updating book club with ID: ${bookClubId}`
+        );
+        return this.bookClubService.updateBookClub(
+            bookClubId,
+            body.name,
+            body.description,
+            userId
+        );
+    }
 
     @Delete(':id')
     @UseGuards(AuthGuard)
@@ -80,6 +81,22 @@ async update(
                 HttpStatus.NOT_FOUND
             );
         }
+    }
+
+    @Get(':id')
+    async getBookClubDetails(
+        @Param('id') id: string
+    ): Promise<BookClub | null> {
+        return this.bookClubService.getBookClubById(id);
+    }
+
+    @Post(':id/add-book')
+    @UseGuards(AuthGuard) // Indien authenticatie vereist is
+    async addBookToClub(
+        @Param('id') bookClubId: string,
+        @Body() body: { bookId: string }
+    ): Promise<BookClub> {
+        return this.bookClubService.addBookToClub(bookClubId, body.bookId);
     }
 
     @Post(':id/join')

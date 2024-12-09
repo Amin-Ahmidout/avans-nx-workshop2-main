@@ -24,19 +24,21 @@ export class BookClubService {
     ): Promise<BookClub> {
         const existingClub = await this.bookClubModel.findOne({ name });
         if (existingClub) {
-            throw new HttpException('A book club with this name already exists', HttpStatus.CONFLICT);
+            throw new HttpException(
+                'A book club with this name already exists',
+                HttpStatus.CONFLICT
+            );
         }
-    
+
         const bookClub = new this.bookClubModel({
             name,
             description,
             owner,
-            members: [owner],
+            members: [owner]
         });
-    
+
         return bookClub.save();
     }
-    
 
     /**
      * Haal alle boekenclubs op
@@ -47,9 +49,9 @@ export class BookClubService {
             .find()
             .populate('owner', 'name email') // Populate de `owner` met alleen `name` en `email`
             .populate('members', 'name email') // Populate de `members` als je dat ook nodig hebt
+            .populate('books', 'title author') // Populeer de boeken
             .exec();
     }
-    
 
     /**
      * Haal een specifieke boekenclub op
@@ -59,10 +61,15 @@ export class BookClubService {
     async getBookClubById(bookClubId: string): Promise<BookClub | null> {
         const bookClub = await this.bookClubModel
             .findById(bookClubId)
-            .populate('members', 'name email')
+            .populate('owner', 'name email') 
+            .populate('members', 'name email') 
+            .populate('books', 'title author') // Populeer de boeken
             .exec();
         if (!bookClub) {
-            throw new HttpException('Book club not found', HttpStatus.NOT_FOUND);
+            throw new HttpException(
+                'Book club not found',
+                HttpStatus.NOT_FOUND
+            );
         }
         return bookClub;
     }
@@ -76,7 +83,10 @@ export class BookClubService {
     async joinBookClub(bookClubId: string, userId: string): Promise<BookClub> {
         const bookClub = await this.bookClubModel.findById(bookClubId);
         if (!bookClub) {
-            throw new HttpException('Book club not found', HttpStatus.NOT_FOUND);
+            throw new HttpException(
+                'Book club not found',
+                HttpStatus.NOT_FOUND
+            );
         }
 
         if (!bookClub.members.includes(userId)) {
@@ -101,7 +111,10 @@ export class BookClubService {
     ): Promise<BookClub | null> {
         const bookClub = await this.bookClubModel.findById(bookClubId);
         if (!bookClub) {
-            throw new HttpException('Book club not found', HttpStatus.NOT_FOUND);
+            throw new HttpException(
+                'Book club not found',
+                HttpStatus.NOT_FOUND
+            );
         }
 
         if (bookClub.owner !== owner) {
@@ -123,14 +136,35 @@ export class BookClubService {
     async deleteBookClub(bookClubId: string, owner: string): Promise<boolean> {
         const bookClub = await this.bookClubModel.findById(bookClubId);
         if (!bookClub) {
-            throw new HttpException('Book club not found', HttpStatus.NOT_FOUND);
+            throw new HttpException(
+                'Book club not found',
+                HttpStatus.NOT_FOUND
+            );
         }
 
         if (bookClub.owner !== owner) {
             throw new HttpException('Unauthorized', HttpStatus.FORBIDDEN);
         }
 
-        const result = await this.bookClubModel.deleteOne({ _id: bookClubId }).exec();
+        const result = await this.bookClubModel
+            .deleteOne({ _id: bookClubId })
+            .exec();
         return result.deletedCount > 0;
     }
+
+    async addBookToClub(bookClubId: string, bookId: string): Promise<BookClub> {
+        const bookClub = await this.bookClubModel.findById(bookClubId);
+    
+        if (!bookClub) {
+            throw new HttpException('Book club not found', HttpStatus.NOT_FOUND);
+        }
+    
+        if (!bookClub.books.includes(bookId)) {
+            bookClub.books.push(bookId);
+        }
+    
+        return bookClub.save();
+    }
+    
+    
 }

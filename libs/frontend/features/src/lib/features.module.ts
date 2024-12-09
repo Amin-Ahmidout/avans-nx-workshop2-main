@@ -17,6 +17,7 @@ import { BookDetailsComponent } from './books/book-details/book-details.componen
 import { BookClubService } from './bookclubs/bookclub.service';
 import { CreateBookClubComponent } from './bookclubs/bookclub-create/book-club-create.component';
 import { BookClubListComponent } from './bookclubs/bookclub-list/book-club-list.component';
+import { BookClubDetailsComponent } from './bookclubs/bookclub-details/book-club-details.component';
 
 @NgModule({
     imports: [
@@ -37,7 +38,8 @@ import { BookClubListComponent } from './bookclubs/bookclub-list/book-club-list.
         FavoritesComponent,
         BookDetailsComponent,
         CreateBookClubComponent,
-        BookClubListComponent
+        BookClubListComponent,
+        BookClubDetailsComponent
     ],
     providers: [
         UserService,
@@ -50,6 +52,7 @@ import { BookClubListComponent } from './bookclubs/bookclub-list/book-club-list.
         BookEditComponent,
         FavoritesComponent,
         BookDetailsComponent,
+        BookClubDetailsComponent,
         FormsModule,  // Voeg FormsModule toe
         ReactiveFormsModule // Voeg ReactiveFormsModule toe
     ],

@@ -1,0 +1,47 @@
+<div class="container mt-4">
+    <h1>{{ bookClub?.name }}</h1>
+    <p>{{ bookClub?.description }}</p>
+    <p><strong>Owner:</strong> {{ bookClub?.owner?.name }}</p>
+    <p><strong>Members:</strong></p>
+    <ul *ngIf="bookClub?.members?.length > 0; else noMembers">
+        <li *ngFor="let member of bookClub.members">
+            {{ member.name }}
+        </li>
+    </ul>
+    <ng-template #noMembers>
+        <p>No members yet.</p>
+    </ng-template>
+
+    <hr />
+
+    <h2>Books in this Club</h2>
+    <ul *ngIf="bookClub?.books?.length > 0; else noBooks">
+        <li *ngFor="let book of bookClub.books">
+            {{ book.title }} by {{ book.author }}
+        </li>
+    </ul>
+    <ng-template #noBooks>
+        <p>No books in this club yet.</p>
+    </ng-template>
+
+    <hr />
+
+    <h3>Add a Book</h3>
+    <form (ngSubmit)="addBookToClub()">
+        <div class="mb-3">
+            <label for="availableBooks" class="form-label">Select a Book</label>
+            <select
+                [(ngModel)]="selectedBookId"
+                name="availableBooks"
+                id="availableBooks"
+                class="form-select"
+                required
+            >
+                <option *ngFor="let book of availableBooks" [value]="book.id">
+                    {{ book.title }} by {{ book.author }}
+                </option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Book</button>
+    </form>
+</div>
