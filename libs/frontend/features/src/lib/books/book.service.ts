@@ -82,6 +82,11 @@ export class BookService {
         return this.http.get<any[]>(url, { headers: this.getAuthHeaders() });
     }
     
+    getPopularBooks(): Observable<any[]> {
+        const url = `${this.rcmndApiUrl}/rcmnd/popular`;
+        return this.http.get<any[]>(url, { headers: this.getAuthHeaders() });
+    }
+    
     
     private getAuthHeaders(): HttpHeaders {
         const token = localStorage.getItem('token'); // Haal de token uit localStorage

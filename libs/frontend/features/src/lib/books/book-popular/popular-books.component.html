@@ -1,0 +1,39 @@
+<div *ngIf="error" class="error">
+    {{ error }}
+</div>
+
+<div *ngIf="popularBooks.length > 0">
+    <h2 class="text-center mt-4">
+        📚 <span class="text-success">Top 3 Popular Books</span>
+    </h2>
+    <div class="d-flex flex-column align-items-center">
+        <div
+            *ngFor="let book of popularBooks; let i = index"
+            class="card mb-3"
+            style="width: 80%; max-width: 600px;"
+        >
+            <div class="card-body">
+                <h5 class="card-title">
+                    {{ i + 1 }}. {{ book.book.title }}
+                </h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    By {{ book.book.author }}
+                </h6>
+                <p class="card-text">
+                    Genre: <strong>{{ book.book.genre }}</strong><br />
+                    Publication Year:
+                    <strong>{{ book.book.publicationYear }}</strong><br />
+                    Average Rating:
+                    <strong>{{ book.book.averageRating || 'N/A' }}</strong>
+                </p>
+                <p class="card-text">
+                    <strong>Favorites:</strong> {{ book.favorites }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="popularBooks.length === 0 && !error">
+    <p class="text-center">Loading...</p>
+</div>
