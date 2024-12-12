@@ -133,24 +133,34 @@ export class BookClubService {
      * @param owner ID van de eigenaar
      * @returns Boolean of het verwijderen succesvol was
      */
-    async deleteBookClub(bookClubId: string, owner: string): Promise<boolean> {
+    async deleteBookClub(bookClubId: string, userId: string): Promise<boolean> {
         const bookClub = await this.bookClubModel.findById(bookClubId);
+    
         if (!bookClub) {
+            console.error(`Book club with ID ${bookClubId} not found.`);
+            throw new HttpException('Book club not found', HttpStatus.NOT_FOUND);
+        }
+    
+        console.log(`Owner ID in DB: ${bookClub.owner}`);
+        console.log(`User ID from request: ${userId}`);
+    
+        if (bookClub.owner.toString() !== userId.toString()) {
+            console.error(
+                `User ${userId} is not authorized to delete book club with ID ${bookClubId}.`
+            );
             throw new HttpException(
-                'Book club not found',
-                HttpStatus.NOT_FOUND
+                'You are not authorized to delete this book club',
+                HttpStatus.FORBIDDEN
             );
         }
-
-        if (bookClub.owner !== owner) {
-            throw new HttpException('Unauthorized', HttpStatus.FORBIDDEN);
-        }
-
-        const result = await this.bookClubModel
-            .deleteOne({ _id: bookClubId })
-            .exec();
+    
+        const result = await this.bookClubModel.deleteOne({ _id: bookClubId }).exec();
+        console.log(
+            `Book club with ID ${bookClubId} deleted successfully: ${result.deletedCount > 0}`
+        );
         return result.deletedCount > 0;
     }
+    
 
     async addBookToClub(bookClubId: string, bookId: string): Promise<BookClub> {
         const bookClub = await this.bookClubModel.findById(bookClubId);
@@ -165,6 +175,9 @@ export class BookClubService {
     
         return bookClub.save();
     }
+
+    
+    
     
     
 }

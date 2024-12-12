@@ -7,14 +7,15 @@ import { BookClubService } from "../bookclub.service";
 })
 export class BookClubListComponent implements OnInit {
     bookClubs: any[] = [];
+    userId: string = ''; // De ingelogde gebruiker
 
     constructor(private bookClubService: BookClubService) {}
 
     ngOnInit(): void {
+        this.userId = localStorage.getItem('userId') || ''; // Haal de ingelogde gebruiker op
         this.bookClubService.getBookClubs().subscribe({
             next: (response: any) => {
-                this.bookClubs = response.results; // Haal de data uit de `results`-eigenschap
-                console.log('Loaded book clubs:', this.bookClubs); // Log de geladen book clubs
+                this.bookClubs = response.results;
             },
             error: (err) => {
                 console.error('Error loading book clubs:', err);
@@ -26,11 +27,30 @@ export class BookClubListComponent implements OnInit {
         this.bookClubService.joinBookClub(bookClubId).subscribe({
             next: () => {
                 alert('Successfully joined the book club!');
-                console.log(`Joined book club with ID: ${bookClubId}`); // Log de bookclub ID
             },
             error: (err) => {
                 console.error('Error joining book club:', err);
             },
         });
+    }
+
+    deleteBookClub(bookClubId: string): void {
+        if (confirm('Are you sure you want to delete this book club?')) {
+            this.bookClubService.deleteBookClub(bookClubId).subscribe({
+                next: () => {
+                    alert('Book club deleted successfully!');
+                    this.bookClubs = this.bookClubs.filter(
+                        (club) => club._id !== bookClubId
+                    );
+                },
+                error: (err) => {
+                    console.error('Error deleting book club:', err);
+                },
+            });
+        }
+    }
+
+    isOwner(ownerId: string): boolean {
+        return this.userId === ownerId; // Controleer of de ingelogde gebruiker de eigenaar is
     }
 }

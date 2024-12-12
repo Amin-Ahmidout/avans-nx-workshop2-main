@@ -66,6 +66,17 @@ export class BookClubService {
         );
     }
     
+    deleteBookClub(bookClubId: string): Observable<void> {
+        console.log('Attempting to delete book club with ID:', bookClubId);
+    
+        const headers = this.getAuthHeaders();
+        console.log('Headers being sent:', headers);
+    
+        return this.http.delete<void>(`${this.apiUrl}/${bookClubId}`, {
+            headers,
+        });
+    }
+    
     
 
     // Helper-methode voor het ophalen van headers met authenticatie

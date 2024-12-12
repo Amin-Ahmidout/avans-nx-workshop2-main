@@ -111,4 +111,23 @@ export class BookClubController {
         );
         return this.bookClubService.joinBookClub(bookClubId, userId);
     }
+
+    @Delete(':id')
+    @UseGuards(AuthGuard)
+    async deleteBookClub(
+        @Param('id') id: string,
+        @Request() req: any
+    ): Promise<void> {
+        const userId = req.user.user_id; // Haal de ID van de ingelogde gebruiker op
+        this.logger.log(
+            `User ${userId} is attempting to delete book club with ID: ${id}`
+        );
+        const success = await this.bookClubService.deleteBookClub(id, userId);
+        if (!success) {
+            throw new HttpException(
+                'Book club not found or unauthorized',
+                HttpStatus.NOT_FOUND
+            );
+        }
+    }
 }

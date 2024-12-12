@@ -1,6 +1,8 @@
 <div class="container mt-4">
     <h1>Book Clubs</h1>
-    <a routerLink="/book-clubs/create" class="btn btn-primary mb-4">Create Book Club</a>
+    <a routerLink="/book-clubs/create" class="btn btn-primary mb-4"
+        >Create Book Club</a
+    >
     <div *ngIf="bookClubs.length > 0; else noBookClubs">
         <div *ngFor="let club of bookClubs" class="card mb-3">
             <div class="card-body">
@@ -8,8 +10,24 @@
                 <p>{{ club.description }}</p>
                 <p><strong>Owner:</strong> {{ club.owner.name }}</p>
                 <p><strong>Members:</strong> {{ club.members.length }}</p>
-                <a [routerLink]="['/book-clubs', club._id]" class="btn btn-primary btn-sm">View Details</a>
-                <button class="btn btn-sm btn-success" (click)="joinBookClub(club._id)">Join</button>
+                <a
+                    [routerLink]="['/book-clubs', club._id]"
+                    class="btn btn-primary btn-sm"
+                    >View Details</a
+                >
+                <button
+                    class="btn btn-sm btn-success"
+                    (click)="joinBookClub(club._id)"
+                >
+                    Join
+                </button>
+                <button
+                    *ngIf="isOwner(club.owner._id)"
+                    class="btn btn-sm btn-danger"
+                    (click)="deleteBookClub(club._id)"
+                >
+                    Delete
+                </button>
             </div>
         </div>
     </div>
