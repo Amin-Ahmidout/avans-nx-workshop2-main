@@ -50,6 +50,9 @@ export class BookClubListComponent implements OnInit {
         }
     }
 
+    
+    
+
     isOwner(ownerId: string): boolean {
         return this.userId === ownerId; // Controleer of de ingelogde gebruiker de eigenaar is
     }

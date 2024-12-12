@@ -50,18 +50,18 @@ export class BookClubController {
         );
     }
 
-    @Put(':id')
+    @Put(':id/edit')
     @UseGuards(AuthGuard)
-    async update(
+    async editBookClub(
         @Param('id') bookClubId: string,
         @Body() body: CreateBookClubDto,
         @Request() req: any
-    ): Promise<BookClub | null> {
+    ): Promise<BookClub> {
         const userId = req.user.user_id;
         this.logger.log(
-            `User ${userId} is updating book club with ID: ${bookClubId}`
+            `User ${userId} is editing book club with ID: ${bookClubId}`
         );
-        return this.bookClubService.updateBookClub(
+        return this.bookClubService.editBookClub(
             bookClubId,
             body.name,
             body.description,
@@ -129,5 +129,19 @@ export class BookClubController {
                 HttpStatus.NOT_FOUND
             );
         }
+    }
+
+    @Delete(':id/remove-book/:bookId')
+    @UseGuards(AuthGuard)
+    async removeBookFromClub(
+        @Param('id') bookClubId: string,
+        @Param('bookId') bookId: string,
+        @Request() req: any
+    ): Promise<BookClub> {
+        const userId = req.user.user_id;
+        this.logger.log(
+            `User ${userId} is removing book with ID: ${bookId} from book club ${bookClubId}`
+        );
+        return this.bookClubService.removeBookFromClub(bookClubId, bookId);
     }
 }

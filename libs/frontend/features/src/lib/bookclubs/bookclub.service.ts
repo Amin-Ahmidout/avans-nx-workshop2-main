@@ -77,6 +77,17 @@ export class BookClubService {
         });
     }
     
+    editBookClub(bookClubId: string, data: { name: string; description: string }): Observable<any> {
+        return this.http.put(`${this.apiUrl}/${bookClubId}/edit`, data, {
+            headers: this.getAuthHeaders()
+        });
+    }
+    
+    removeBookFromClub(bookClubId: string, bookId: string): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/${bookClubId}/remove-book/${bookId}`, {
+            headers: this.getAuthHeaders(),
+        });
+    }
     
 
     // Helper-methode voor het ophalen van headers met authenticatie

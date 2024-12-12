@@ -103,29 +103,42 @@ export class BookClubService {
      * @param owner ID van de eigenaar
      * @returns Geüpdatete boekenclub
      */
-    async updateBookClub(
+    async editBookClub(
         bookClubId: string,
         name: string,
         description: string,
-        owner: string
-    ): Promise<BookClub | null> {
+        userId: string
+    ): Promise<BookClub> {
+        console.log(`Attempting to edit book club with ID: ${bookClubId}`);
+    
         const bookClub = await this.bookClubModel.findById(bookClubId);
         if (!bookClub) {
+            console.error(`Book club with ID ${bookClubId} not found.`);
+            throw new HttpException('Book club not found', HttpStatus.NOT_FOUND);
+        }
+        console.log(`Book club found: ${JSON.stringify(bookClub)}`);
+    
+        if (bookClub.owner.toString() !== userId.toString()) {
+            console.error(`Authorization failed. Book club owner: ${bookClub.owner}, Request user: ${userId}`);
             throw new HttpException(
-                'Book club not found',
-                HttpStatus.NOT_FOUND
+                'You are not authorized to edit this book club',
+                HttpStatus.FORBIDDEN
             );
         }
-
-        if (bookClub.owner !== owner) {
-            throw new HttpException('Unauthorized', HttpStatus.FORBIDDEN);
-        }
-
+        console.log(`Authorization successful. User ${userId} is the owner of the book club.`);
+    
+        console.log(`Updating book club with new values. Name: ${name}, Description: ${description}`);
         bookClub.name = name;
         bookClub.description = description;
-
-        return bookClub.save();
+    
+        const updatedBookClub = await bookClub.save();
+        console.log(`Book club updated successfully: ${JSON.stringify(updatedBookClub)}`);
+        return updatedBookClub;
     }
+    
+    
+    
+    
 
     /**
      * Verwijder een boekenclub
@@ -176,6 +189,18 @@ export class BookClubService {
         return bookClub.save();
     }
 
+    async removeBookFromClub(bookClubId: string, bookId: string): Promise<BookClub> {
+        const bookClub = await this.bookClubModel.findById(bookClubId);
+    
+        if (!bookClub) {
+            throw new HttpException('Book club not found', HttpStatus.NOT_FOUND);
+        }
+    
+        bookClub.books = bookClub.books.filter((id) => id.toString() !== bookId);
+    
+        return bookClub.save();
+    }
+    
     
     
     

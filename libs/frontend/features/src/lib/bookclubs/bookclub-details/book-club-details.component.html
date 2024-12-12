@@ -1,47 +1,96 @@
 <div class="container mt-4">
-    <h1>{{ bookClub?.name }}</h1>
-    <p>{{ bookClub?.description }}</p>
-    <p><strong>Owner:</strong> {{ bookClub?.owner?.name }}</p>
-    <p><strong>Members:</strong></p>
-    <ul *ngIf="bookClub?.members?.length > 0; else noMembers">
-        <li *ngFor="let member of bookClub.members">
-            {{ member.name }}
-        </li>
-    </ul>
-    <ng-template #noMembers>
-        <p>No members yet.</p>
-    </ng-template>
+    <!-- Titel en beschrijving -->
+    <h1 class="club-title">{{ bookClub?.name }}</h1>
+    <p class="club-description">{{ bookClub?.description }}</p>
+    <p class="club-owner">
+        <strong>Owner:</strong> {{ bookClub?.owner?.name }}
+    </p>
+
+    <!-- Ledenlijst -->
+    <div class="members-section">
+        <h3 class="section-title">Members</h3>
+        <ul *ngIf="bookClub?.members?.length > 0; else noMembers" class="members-list">
+            <li *ngFor="let member of bookClub.members" class="member-item">
+                {{ member.name }}
+            </li>
+        </ul>
+        <ng-template #noMembers>
+            <p class="text-muted">No members yet.</p>
+        </ng-template>
+    </div>
 
     <hr />
 
-    <h2>Books in this Club</h2>
-    <ul *ngIf="bookClub?.books?.length > 0; else noBooks">
-        <li *ngFor="let book of bookClub.books">
-            {{ book.title }} by {{ book.author }}
-        </li>
-    </ul>
-    <ng-template #noBooks>
-        <p>No books in this club yet.</p>
-    </ng-template>
+    <!-- Boekenlijst -->
+    <div class="books-section">
+        <h3 class="section-title">Books in this Club</h3>
+        <ul *ngIf="bookClub?.books?.length > 0; else noBooks" class="books-list">
+            <li *ngFor="let book of bookClub.books" class="book-item d-flex justify-content-between align-items-center">
+                <span>{{ book.title }} by {{ book.author }}</span>
+                <button
+                    class="btn btn-sm btn-danger"
+                    (click)="removeBookFromClub(book._id)"
+                >
+                    Remove
+                </button>
+            </li>
+        </ul>
+        <ng-template #noBooks>
+            <p class="text-muted">No books in this club yet.</p>
+        </ng-template>
+    </div>
 
     <hr />
 
-    <h3>Add a Book</h3>
-    <form (ngSubmit)="addBookToClub()">
-        <div class="mb-3">
-            <label for="availableBooks" class="form-label">Select a Book</label>
-            <select
-                [(ngModel)]="selectedBookId"
-                name="availableBooks"
-                id="availableBooks"
-                class="form-select"
-                required
-            >
-                <option *ngFor="let book of availableBooks" [value]="book.id">
-                    {{ book.title }} by {{ book.author }}
-                </option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Add Book</button>
-    </form>
+    <!-- Boek toevoegen -->
+    <div class="add-book-section">
+        <h3 class="section-title">Add a Book</h3>
+        <form (ngSubmit)="addBookToClub()" class="add-book-form">
+            <div class="mb-3">
+                <label for="availableBooks" class="form-label">Select a Book</label>
+                <select
+                    [(ngModel)]="selectedBookId"
+                    name="availableBooks"
+                    id="availableBooks"
+                    class="form-select"
+                    required
+                >
+                    <option *ngFor="let book of availableBooks" [value]="book.id">
+                        {{ book.title }} by {{ book.author }}
+                    </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Book</button>
+        </form>
+    </div>
+
+    <hr />
+
+    <!-- Bookclub bewerken -->
+    <div *ngIf="isOwner(bookClub?.owner?._id)" class="edit-club-section">
+        <h3 class="section-title">Edit Book Club</h3>
+        <form (ngSubmit)="editBookClub()" class="edit-club-form">
+            <div class="mb-3">
+                <label for="clubName" class="form-label">Book Club Name</label>
+                <input
+                    [(ngModel)]="bookClub.name"
+                    name="clubName"
+                    id="clubName"
+                    class="form-control"
+                    required
+                />
+            </div>
+            <div class="mb-3">
+                <label for="clubDescription" class="form-label">Description</label>
+                <textarea
+                    [(ngModel)]="bookClub.description"
+                    name="clubDescription"
+                    id="clubDescription"
+                    class="form-control"
+                    required
+                ></textarea>
+            </div>
+            <button type="submit" class="btn btn-warning">Save Changes</button>
+        </form>
+    </div>
 </div>

@@ -12,6 +12,7 @@ export class BookClubDetailsComponent implements OnInit {
     availableBooks: any[] = []; // Lijst voor beschikbare boeken
     selectedBookId: string = ''; // Geselecteerd boek ID
     newBookId: string = '';
+    userId: string = localStorage.getItem('userId') || ''; // Haal de ingelogde gebruiker op
 
     constructor(
         private route: ActivatedRoute,
@@ -60,6 +61,47 @@ export class BookClubDetailsComponent implements OnInit {
                 error: (err: any) => console.error('Error adding book:', err),
             });
         }
+    }
+
+    removeBookFromClub(bookId: string): void {
+        if (confirm('Are you sure you want to remove this book from the club?')) {
+            this.bookClubService.removeBookFromClub(this.bookClub._id, bookId).subscribe({
+                next: (updatedClub: any) => {
+                    // Verwijder het boek lokaal uit de lijst
+                    this.bookClub.books = this.bookClub.books.filter(
+                        (book: any) => book._id !== bookId
+                    );
+                    console.log('Book removed successfully:', updatedClub);
+                },
+                error: (err: any) => console.error('Error removing book:', err),
+            });
+        }
+    }
+
+    editBookClub(): void {
+        const updatedData = {
+            name: this.bookClub.name,
+            description: this.bookClub.description,
+        };
+    
+        this.bookClubService.editBookClub(this.bookClub._id, updatedData).subscribe({
+            next: (updatedClub: any) => {
+                alert('Book club updated successfully!');
+                this.bookClub = { ...this.bookClub, ...updatedClub }; // Gebruik een nieuw object
+                console.log('Updated book club data:', updatedClub);
+            },
+            error: (err: any) => {
+                console.error('Error updating book club:', err);
+                alert('Failed to update the book club. Please try again.');
+            },
+        });
+    }
+    
+    
+    
+    
+    isOwner(ownerId: string): boolean {
+        return this.userId === ownerId; // Controleer of de ingelogde gebruiker de eigenaar is
     }
     
 }
