@@ -16,6 +16,7 @@ export class BookNeo4jService implements OnApplicationBootstrap {
     async onApplicationBootstrap(): Promise<void> {
         this.logger.log('Starting book and user sync with Neo4j...');
         try {
+            await this.clearDatabase();
             await this.syncBooks();
             this.logger.log('Book synchronization with Neo4j completed.');
             await this.syncUsers();
@@ -25,20 +26,27 @@ export class BookNeo4jService implements OnApplicationBootstrap {
         }
     }
 
-    // Synchroniseer boeken en reviews naar Neo4j
+    // Clear Neo4j database
+    async clearDatabase(): Promise<void> {
+        this.logger.log('Clearing Neo4j database...');
+        await this.neo4jService.write(`MATCH (n) DETACH DELETE n`);
+        this.logger.log('Neo4j database cleared.');
+    }
+
+    // Synchronize books and reviews
     async syncBooks(): Promise<void> {
         const books = await this.mongoBookService.findAll();
 
         for (const book of books) {
             try {
                 this.logger.log(`Synchronizing book: ${book.title}`);
-                
-                // Bereken gemiddelde beoordeling
+
+                // Calculate average rating
                 const averageRating = book.reviews?.length
                     ? book.reviews.reduce((sum, review) => sum + review.rating, 0) / book.reviews.length
                     : 0;
 
-                // Voeg boek toe aan Neo4j
+                // Add book to Neo4j
                 await this.neo4jService.write(
                     `
                     MERGE (b:Book {id: $bookId})
@@ -54,11 +62,11 @@ export class BookNeo4jService implements OnApplicationBootstrap {
                         author: book.author,
                         genre: book.genre,
                         publicationYear: book.publicationYear,
-                        averageRating
+                        averageRating,
                     }
                 );
 
-                // Voeg reviews toe
+                // Add reviews to Neo4j
                 for (const review of book.reviews || []) {
                     const user = await this.mongoUserService.findOne(review.userId);
                     if (user) {
@@ -75,7 +83,7 @@ export class BookNeo4jService implements OnApplicationBootstrap {
                                 userName: user.name,
                                 userEmail: user.emailAddress,
                                 comment: review.comment,
-                                rating: review.rating
+                                rating: review.rating,
                             }
                         );
                     }
@@ -86,15 +94,15 @@ export class BookNeo4jService implements OnApplicationBootstrap {
         }
     }
 
-    // Synchroniseer gebruikers en favorieten naar Neo4j
+    // Synchronize users and favorites
     async syncUsers(): Promise<void> {
         const users = await this.mongoUserService.findAll();
 
         for (const user of users) {
             try {
                 this.logger.log(`Synchronizing user: ${user.name}`);
-                
-                // Voeg gebruiker toe aan Neo4j
+
+                // Add user to Neo4j
                 await this.neo4jService.write(
                     `
                     MERGE (u:User {id: $userId})
@@ -112,12 +120,14 @@ export class BookNeo4jService implements OnApplicationBootstrap {
                         profileImgUrl: user.profileImgUrl || '',
                         role: user.role || 'Guest',
                         gender: user.gender || 'Unknown',
-                        isActive: Boolean(user.isActive)
+                        isActive: Boolean(user.isActive),
                     }
                 );
 
-                // Voeg favoriete boeken toe als relaties
-                for (const bookId of user.favoriteBooks || []) {
+                // Add favorite books relationships
+                for (const book of user.favoriteBooks || []) {
+                    const bookId = typeof book === 'object' ? book.id : book;
+                    this.logger.log(`Adding favorite book relationship: User=${user.name}, BookId=${bookId}`);
                     await this.neo4jService.write(
                         `
                         MATCH (b:Book {id: $bookId})
@@ -126,7 +136,7 @@ export class BookNeo4jService implements OnApplicationBootstrap {
                         `,
                         {
                             userId: user._id.toString(),
-                            bookId: bookId.toString()
+                            bookId: bookId.toString(),
                         }
                     );
                 }
@@ -136,12 +146,11 @@ export class BookNeo4jService implements OnApplicationBootstrap {
         }
     }
 
-    // Haal populairste boeken op
+    // Get popular books based on favorites
     async getPopularBooks(): Promise<any[]> {
         const query = `
           MATCH (b:Book)<-[:FAVORITES]-(u:User)
-          OPTIONAL MATCH (u)-[r:WROTE_REVIEW]->(b)
-          RETURN b, COUNT(u) AS favorites, COLLECT(r) AS reviews
+          RETURN b, COUNT(DISTINCT u) AS favorites
           ORDER BY favorites DESC
           LIMIT 10
         `;
@@ -149,15 +158,11 @@ export class BookNeo4jService implements OnApplicationBootstrap {
 
         return result.records.map((record) => ({
             book: record.get('b').properties,
-            favorites: record.get('favorites').toInt(),
-            reviews: record.get('reviews').map((r: any) => ({
-                comment: r.properties.comment,
-                rating: r.properties.rating
-            }))
+            favorites: record.get('favorites')?.toInt() || 0,
         }));
     }
 
-    // Haal best beoordeelde boeken op
+    // Get best-rated books based on reviews
     async getBestRatedBooks(): Promise<any[]> {
         const query = `
           MATCH (b:Book)
@@ -173,7 +178,7 @@ export class BookNeo4jService implements OnApplicationBootstrap {
         return result.records.map((record) => ({
             title: record.get('title'),
             author: record.get('author'),
-            averageRating: record.get('averageRating')?.toFixed(2) || '0.00'
+            averageRating: record.get('averageRating')?.toFixed(2) || '0.00',
         }));
     }
 }

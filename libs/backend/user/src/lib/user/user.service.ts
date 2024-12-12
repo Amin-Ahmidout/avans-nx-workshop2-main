@@ -16,7 +16,9 @@ export class UserService {
 
     async findAll(): Promise<IUserInfo[]> {
         this.logger.log(`Finding all items`);
-        const items = await this.userModel.find();
+        const items = await this.userModel
+        .find()
+        .populate('favoriteBooks');
         return items;
     }
 
