@@ -27,7 +27,9 @@
         <ul *ngIf="bookClub?.books?.length > 0; else noBooks" class="books-list">
             <li *ngFor="let book of bookClub.books" class="book-item d-flex justify-content-between align-items-center">
                 <span>{{ book.title }} by {{ book.author }}</span>
+                <!-- Verwijder-knop alleen zichtbaar voor de eigenaar -->
                 <button
+                    *ngIf="isOwner(bookClub?.owner?._id)"
                     class="btn btn-sm btn-danger"
                     (click)="removeBookFromClub(book._id)"
                 >
@@ -43,7 +45,8 @@
     <hr />
 
     <!-- Boek toevoegen -->
-    <div class="add-book-section">
+    <!-- Formulier alleen zichtbaar voor de eigenaar -->
+    <div *ngIf="isOwner(bookClub?.owner?._id)" class="add-book-section">
         <h3 class="section-title">Add a Book</h3>
         <form (ngSubmit)="addBookToClub()" class="add-book-form">
             <div class="mb-3">

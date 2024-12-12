@@ -91,25 +91,39 @@ export class BookClubController {
     }
 
     @Post(':id/add-book')
-    @UseGuards(AuthGuard) // Indien authenticatie vereist is
+    @UseGuards(AuthGuard)
     async addBookToClub(
         @Param('id') bookClubId: string,
-        @Body() body: { bookId: string }
-    ): Promise<BookClub> {
-        return this.bookClubService.addBookToClub(bookClubId, body.bookId);
-    }
-
-    @Post(':id/join')
-    @UseGuards(AuthGuard)
-    async join(
-        @Param('id') bookClubId: string,
+        @Body() body: { bookId: string },
         @Request() req: any
     ): Promise<BookClub> {
         const userId = req.user.user_id;
         this.logger.log(
-            `User ${userId} is joining book club with ID: ${bookClubId}`
+            `User ${userId} is adding a book to book club ${bookClubId}`
         );
-        return this.bookClubService.joinBookClub(bookClubId, userId);
+        return this.bookClubService.addBookToClub(
+            bookClubId,
+            body.bookId,
+            userId
+        );
+    }
+
+    @Delete(':id/remove-book/:bookId')
+    @UseGuards(AuthGuard)
+    async removeBookFromClub(
+        @Param('id') bookClubId: string,
+        @Param('bookId') bookId: string,
+        @Request() req: any
+    ): Promise<BookClub> {
+        const userId = req.user.user_id;
+        this.logger.log(
+            `User ${userId} is removing book ${bookId} from book club ${bookClubId}`
+        );
+        return this.bookClubService.removeBookFromClub(
+            bookClubId,
+            bookId,
+            userId
+        );
     }
 
     @Delete(':id')
@@ -131,17 +145,5 @@ export class BookClubController {
         }
     }
 
-    @Delete(':id/remove-book/:bookId')
-    @UseGuards(AuthGuard)
-    async removeBookFromClub(
-        @Param('id') bookClubId: string,
-        @Param('bookId') bookId: string,
-        @Request() req: any
-    ): Promise<BookClub> {
-        const userId = req.user.user_id;
-        this.logger.log(
-            `User ${userId} is removing book with ID: ${bookId} from book club ${bookClubId}`
-        );
-        return this.bookClubService.removeBookFromClub(bookClubId, bookId);
-    }
+    
 }

@@ -175,11 +175,18 @@ export class BookClubService {
     }
     
 
-    async addBookToClub(bookClubId: string, bookId: string): Promise<BookClub> {
+    async addBookToClub(bookClubId: string, bookId: string, userId: string): Promise<BookClub> {
         const bookClub = await this.bookClubModel.findById(bookClubId);
     
         if (!bookClub) {
             throw new HttpException('Book club not found', HttpStatus.NOT_FOUND);
+        }
+    
+        if (bookClub.owner.toString() !== userId.toString()) {
+            throw new HttpException(
+                'You are not authorized to add books to this book club',
+                HttpStatus.FORBIDDEN
+            );
         }
     
         if (!bookClub.books.includes(bookId)) {
@@ -188,18 +195,26 @@ export class BookClubService {
     
         return bookClub.save();
     }
-
-    async removeBookFromClub(bookClubId: string, bookId: string): Promise<BookClub> {
+    
+    async removeBookFromClub(bookClubId: string, bookId: string, userId: string): Promise<BookClub> {
         const bookClub = await this.bookClubModel.findById(bookClubId);
     
         if (!bookClub) {
             throw new HttpException('Book club not found', HttpStatus.NOT_FOUND);
         }
     
+        if (bookClub.owner.toString() !== userId.toString()) {
+            throw new HttpException(
+                'You are not authorized to remove books from this book club',
+                HttpStatus.FORBIDDEN
+            );
+        }
+    
         bookClub.books = bookClub.books.filter((id) => id.toString() !== bookId);
     
         return bookClub.save();
     }
+    
     
     
     

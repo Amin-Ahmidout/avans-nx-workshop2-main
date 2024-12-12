@@ -47,36 +47,38 @@ export class BookClubDetailsComponent implements OnInit {
         if (this.selectedBookId) {
             this.bookClubService.addBookToClub(this.bookClub._id, this.selectedBookId).subscribe({
                 next: (updatedClub: any) => {
-                    // Voeg het nieuwe boek toe aan de lokale lijst
                     const addedBook = this.availableBooks.find(book => book._id === this.selectedBookId);
                     if (addedBook) {
                         this.bookClub.books.push(addedBook);
                     }
-                    
-                    // Reset de geselecteerde boek-ID
                     this.selectedBookId = '';
-    
                     console.log('Book added successfully:', updatedClub);
                 },
-                error: (err: any) => console.error('Error adding book:', err),
+                error: (err: any) => {
+                    console.error('Error adding book:', err);
+                    alert('You are not authorized to add books to this club.');
+                },
             });
         }
     }
-
+    
     removeBookFromClub(bookId: string): void {
         if (confirm('Are you sure you want to remove this book from the club?')) {
             this.bookClubService.removeBookFromClub(this.bookClub._id, bookId).subscribe({
                 next: (updatedClub: any) => {
-                    // Verwijder het boek lokaal uit de lijst
                     this.bookClub.books = this.bookClub.books.filter(
                         (book: any) => book._id !== bookId
                     );
                     console.log('Book removed successfully:', updatedClub);
                 },
-                error: (err: any) => console.error('Error removing book:', err),
+                error: (err: any) => {
+                    console.error('Error removing book:', err);
+                    alert('You are not authorized to remove books from this club.');
+                },
             });
         }
     }
+    
 
     editBookClub(): void {
         const updatedData = {
