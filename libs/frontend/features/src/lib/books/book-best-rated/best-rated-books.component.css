@@ -1,3 +1,7 @@
+.content-container {
+    margin-bottom: 100px; /* Zorgt voor voldoende ruimte boven de footer */
+}
+
 .error {
     color: red;
     text-align: center;
