@@ -18,6 +18,7 @@ import { BookClubService } from './bookclubs/bookclub.service';
 import { CreateBookClubComponent } from './bookclubs/bookclub-create/book-club-create.component';
 import { BookClubListComponent } from './bookclubs/bookclub-list/book-club-list.component';
 import { BookClubDetailsComponent } from './bookclubs/bookclub-details/book-club-details.component';
+import { BestRatedBooksComponent } from './books/book-best-rated/best-rated-books.component';
 
 @NgModule({
     imports: [
@@ -39,7 +40,8 @@ import { BookClubDetailsComponent } from './bookclubs/bookclub-details/book-club
         BookDetailsComponent,
         CreateBookClubComponent,
         BookClubListComponent,
-        BookClubDetailsComponent
+        BookClubDetailsComponent,
+        BestRatedBooksComponent
     ],
     providers: [
         UserService,

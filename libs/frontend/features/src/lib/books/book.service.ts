@@ -10,6 +10,7 @@ import { Review } from 'libs/backend/features/src/lib/book/book.schema';
 })
 export class BookService {
     private apiUrl = `${environment.dataApiUrl}/book`;
+    private rcmndApiUrl = `${environment.rcmndApiUrl}`;
 
     constructor(private http: HttpClient) {}
 
@@ -74,6 +75,11 @@ export class BookService {
             headers: this.getAuthHeaders(),
             params: { query } // Voeg de zoekparameter toe
         });
+    }
+    
+    getBestRatedBooks(): Observable<any[]> {
+        const url = `${this.rcmndApiUrl}/rcmnd/best-rated`; // Zorg dat `apiBaseUrl` klopt
+        return this.http.get<any[]>(url, { headers: this.getAuthHeaders() });
     }
     
     

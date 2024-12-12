@@ -12,6 +12,7 @@ import { BookDetailsComponent } from '../../../../libs/frontend/features/src/lib
 import { BookClubListComponent } from '../../../../libs/frontend/features/src/lib/bookclubs/bookclub-list/book-club-list.component';
 import { CreateBookClubComponent } from '../../../../libs/frontend/features/src/lib/bookclubs/bookclub-create/book-club-create.component';
 import { BookClubDetailsComponent } from '../../../../libs/frontend/features/src/lib/bookclubs/bookclub-details/book-club-details.component';	
+import { BestRatedBooksComponent } from 'libs/frontend/features/src/lib/books/book-best-rated/best-rated-books.component';
 
 export const appRoutes: Route[] = [
     // Hier komen onze URLs te staan.
@@ -35,6 +36,7 @@ export const appRoutes: Route[] = [
     { path: 'book-clubs', component: BookClubListComponent },
     { path: 'book-clubs/create', component: CreateBookClubComponent },
     {path: 'book-clubs/:id', component: BookClubDetailsComponent},
+    { path: 'best-rated-books', component: BestRatedBooksComponent },
 
 
     

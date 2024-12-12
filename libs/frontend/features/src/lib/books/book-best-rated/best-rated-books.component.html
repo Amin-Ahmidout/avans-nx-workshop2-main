@@ -1,0 +1,21 @@
+<div *ngIf="error" class="error">
+    <p>{{ error }}</p>
+  </div>
+  
+  <div *ngIf="bestRatedBooks.length > 0" class="best-rated-books">
+    <h2>🌟 Top 3 Best Rated Books</h2>
+    <div class="book-card" *ngFor="let book of bestRatedBooks; let i = index">
+      <div class="card-header">
+        <h3>{{ i + 1 }}. {{ book.title }}</h3>
+      </div>
+      <div class="card-body">
+        <p><strong>Author:</strong> {{ book.author }}</p>
+        <p><strong>Average Rating:</strong> {{ book.averageRating }}</p>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="bestRatedBooks.length === 0 && !error" class="loading">
+    <p>Loading the best rated books...</p>
+  </div>
+  

@@ -3,6 +3,7 @@ export interface IEnvironment {
 
     ROOT_DOMAIN_URL: string;
     dataApiUrl: string;
+    rcmndApiUrl: string;
 
     MONGO_DB_CONNECTION_STRING: string;
 
