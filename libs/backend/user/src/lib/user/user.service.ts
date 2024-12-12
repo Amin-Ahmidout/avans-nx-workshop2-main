@@ -26,7 +26,9 @@ export class UserService {
             this.logger.error(`Invalid ObjectId: ${_id}`);
             throw new HttpException(`Invalid ID format`, 400);
         }
-        const item = await this.userModel.findById(new Types.ObjectId(_id)).exec();
+        const item = await this.userModel.findById(new Types.ObjectId(_id))
+        .populate('favoriteBooks')
+        .exec();
         if (!item) {
             this.logger.debug('Item not found');
             throw new HttpException('User not found', 404);
@@ -123,16 +125,21 @@ export class UserService {
     
         const user = await this.userModel
             .findById(userId)
-            .populate('favoriteBooks') // Populeert de favorieten
+            .populate('favoriteBooks') // Populeert de favoriete boeken
             .exec();
     
         if (!user) {
             throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         }
     
-        // Cast de data naar IBook[] als het veld correct is gepopuleerd
-        return user.favoriteBooks as IBook[];
+        // Controleer of de gepopuleerde favorieten bestaan en retourneer deze
+        if (Array.isArray(user.favoriteBooks)) {
+            return user.favoriteBooks as IBook[];
+        }
+    
+        return [];
     }
+    
     
     
 }

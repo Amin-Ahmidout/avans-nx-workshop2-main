@@ -2,11 +2,13 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { BookGenre, IUserIdentity } from '@avans-nx-workshop/shared/api';
 import { IBook } from '@avans-nx-workshop/shared/api';
+import { IReview } from '@avans-nx-workshop/shared/api';
+
 
 export type BookDocument = Book & Document;
 
 @Schema()
-export class Review {
+export class Review implements IReview {
     @Prop({ required: true, type: Types.ObjectId, ref: 'User' }) // Verwijzing naar een gebruiker
     userId!: string;
 

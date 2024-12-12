@@ -4,3 +4,5 @@ export * from './lib/models/api-response.interface';
 export * from './lib/models/user.interface';
 export * from './lib/models/auth.interface';
 export * from './lib/models/user.service'
+export * from './lib/models/bookclub.interface';
+export * from './lib/models/review.interface';

@@ -1,5 +1,6 @@
 import { Id } from './id.type';
 import { IUserIdentity } from './user.interface';
+import { IReview } from './review.interface';
 
 export enum BookGenre {
     Fiction = 'Fiction',
@@ -17,6 +18,7 @@ export interface IBook {
     publicationYear: string;
     genre: BookGenre;
     addedBy: IUserIdentity;
+    reviews?: IReview[];
 }
 
 export type ICreateBook = Pick<IBook, 'title' | 'description' | 'genre'>;

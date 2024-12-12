@@ -9,6 +9,7 @@ import { AuthModule } from '@avans-nx-workshop/backend/auth';
 import { JwtModule } from '@nestjs/jwt';
 import { BookClubController } from './bookclub/bookclub-controller';
 import { BookClubService } from './bookclub/bookclub-service';
+import { UserService } from '../../../user/src/lib/user/user.service';
 
 
 @Module({
@@ -22,7 +23,7 @@ import { BookClubService } from './bookclub/bookclub-service';
         AuthModule
     ],
     controllers: [BookController, BookClubController],
-    providers: [BookService, BookClubService],
-    exports: [BookService, BookClubService]
+    providers: [BookService, BookClubService, UserService],
+    exports: [BookService, BookClubService, UserService]
 })
 export class BackendFeaturesBookModule {}

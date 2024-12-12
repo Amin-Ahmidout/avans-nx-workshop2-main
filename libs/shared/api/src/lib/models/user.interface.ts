@@ -39,6 +39,7 @@ export interface IUserInfo extends IUserRegistration {
     role: UserRole;
     gender: UserGender;
     isActive: boolean;
+    favoriteBooks?: (IBook | string)[];
 }
 
 /**
