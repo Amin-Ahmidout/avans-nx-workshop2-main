@@ -51,6 +51,7 @@ export class User implements IUser {
 
     @Prop({
         required: false,
+        enum: UserRole,
         type: String,
         default: UserRole.Guest
     })
@@ -59,6 +60,7 @@ export class User implements IUser {
     @Prop({
         required: false,
         type: String,
+        enum: UserGender,
         default: UserGender.Unknown
     })
     gender: UserGender = UserGender.Unknown;

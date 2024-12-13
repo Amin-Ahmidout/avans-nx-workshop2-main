@@ -49,6 +49,7 @@ export class UserService {
 
     async create(user: CreateUserDto): Promise<IUserInfo> {
         this.logger.log(`Create user ${user.name}`);
+        this.logger.log(`Received create payload: ${JSON.stringify(user)}`);
         const createdItem = this.userModel.create(user);
         return createdItem;
     }
