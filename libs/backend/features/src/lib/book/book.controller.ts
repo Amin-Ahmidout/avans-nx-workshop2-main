@@ -13,12 +13,13 @@ import { IBook } from '@avans-nx-workshop/shared/api';
 import { CreateBookDto, UpdateBookDto } from '@avans-nx-workshop/backend/dto';
 import { AuthGuard } from '@avans-nx-workshop/backend/auth';
 import { Review } from './book.schema';
+import { UserService } from '@avans-nx-workshop/backend/user';
 
 @Controller('book')
 export class BookController {
     private readonly logger = new Logger(BookController.name);
 
-    constructor(private bookService: BookService) {}
+    constructor(private bookService: BookService, private userService: UserService) {}
 
     @Get('')
     getAll(): Promise<IBook[]> {
@@ -82,4 +83,6 @@ export class BookController {
     async getReviews(@Param('id') bookId: string): Promise<Review[]> {
         return this.bookService.getReviews(bookId);
     }
+
+    
 }

@@ -17,6 +17,7 @@ import { environment } from '@avans-nx-workshop/shared/util-env';
         }),
         Neo4jBackendModule,
         BackendFeaturesBookModule,
+        
     ],
 })
 export class AppModule {}

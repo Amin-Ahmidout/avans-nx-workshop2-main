@@ -7,6 +7,7 @@ import {
     HttpStatus,
     Param,
     Post,
+    Request,
     Put,
     UseGuards
 } from '@nestjs/common';
@@ -18,6 +19,7 @@ import { AuthGuard } from 'libs/backend/auth/src/lib/auth/auth.guards';
 
 @Controller('user')
 export class UserController {
+    logger: any;
     constructor(private readonly userService: UserService) {}
 
     @Get()
@@ -32,6 +34,13 @@ export class UserController {
     //     return result;
     // }
 
+    @Get('me')
+    @UseGuards(AuthGuard)
+    async getMe(@Request() req: any): Promise<any> {
+        const userId = req.user.user_id;
+        return this.userService.findById(userId); // Zorg dat je de correcte service methode gebruikt
+    }
+    
     @Get(':id')
     async findOne(@Param('id') id: string): Promise<IUser | null> {
         return this.userService.findOne(id);
@@ -74,9 +83,17 @@ export class UserController {
             return await this.userService.getFavorites(userId);
         } catch (error) {
             if (error instanceof Error) {
-                throw new HttpException(error.message, (error as any).status || HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new HttpException(
+                    error.message,
+                    (error as any).status || HttpStatus.INTERNAL_SERVER_ERROR
+                );
             }
-            throw new HttpException('Unknown error', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(
+                'Unknown error',
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
+
+   
 }

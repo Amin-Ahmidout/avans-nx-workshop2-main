@@ -21,9 +21,9 @@ export const appRoutes: Route[] = [
     { path: 'dashboard', component: DashboardComponent },
     { path: 'about', pathMatch: 'full', component: AboutComponent },
     { path: 'users', pathMatch: 'full', component: UserListComponent },
-    { path: 'users/:id', component: UserDetailsComponent },
+    { path: 'user/:id', component: UserDetailsComponent },
     { path: 'users/new', component: UserEditComponent },
-    { path: 'users/:id/edit', component: UserEditComponent },
+    { path: 'user/:id/edit', component: UserEditComponent },
     {path: 'columns',component: ColumnsComponent, children:[
         {path: ':id', component: UserDetailsComponent}
     ] },
@@ -39,6 +39,7 @@ export const appRoutes: Route[] = [
     {path: 'book-clubs/:id', component: BookClubDetailsComponent},
     { path: 'best-rated-books', component: BestRatedBooksComponent },
     { path : 'popular-books', component: PopularBooksComponent },
+    { path: 'user/details', component: UserDetailsComponent },
 
 
     

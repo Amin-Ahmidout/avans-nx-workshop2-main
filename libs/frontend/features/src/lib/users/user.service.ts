@@ -27,4 +27,11 @@ export class UserService {
   deleteUser(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  getCurrentUser(): Observable<IUserInfo> {
+    const token = localStorage.getItem('token'); // Zorg dat het token correct is opgeslagen
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.get<IUserInfo>(`${this.apiUrl}/me`, { headers });
+  }
+  
 }

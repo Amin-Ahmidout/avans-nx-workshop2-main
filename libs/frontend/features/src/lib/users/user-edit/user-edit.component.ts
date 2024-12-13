@@ -74,7 +74,7 @@ export class UserEditComponent implements OnInit {
           console.log('Update response:', response);
           if (response) {
             console.log('User updated successfully!');
-            this.router.navigate(['/users', this.userId]);
+            this.router.navigate(['/user', this.userId]);
           } else {
             console.error('Update failed. No changes made.');
             this.errorMessage = 'Failed to update user. Please try again.';
