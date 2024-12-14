@@ -119,7 +119,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'book-data-api'
+          app-name: 'rcmnd-api-amin'
           slot-name: 'Production'
           publish-profile: ${{ secrets.PUBLISH_PROFILE_RCMND }}
           package: .
