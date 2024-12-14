@@ -5,7 +5,7 @@ export const environment: IEnvironment = {
 
     ROOT_DOMAIN_URL: 'https://book-data-api.azurewebsites.net/',
     dataApiUrl: 'https://book-data-api.azurewebsites.net/api',
-    rcmndApiUrl: 'http://localhost:3100/api',
+    rcmndApiUrl: 'https://rcmnd-api-amin.azurewebsites.net/api/',
 
     MONGO_DB_CONNECTION_STRING: 'mongodb+srv://admin:admin@cluster0.pkmgh.mongodb.net/BookDb?retryWrites=true&w=majority&appName=Cluster0',
     RCMND_NEO4J_DB_HOST: 'ea67c60d.databases.neo4j.io',
