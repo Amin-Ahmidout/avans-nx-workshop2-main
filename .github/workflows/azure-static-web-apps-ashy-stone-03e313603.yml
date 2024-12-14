@@ -113,10 +113,10 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: data-api
+          name: rcmnd-api
  
       - name: Unzip artifact for deployment
-        run: unzip data-api-release.zip
+        run: unzip rcmnd-api-release.zip
  
       - name: Install dependencies
         run: npm install
