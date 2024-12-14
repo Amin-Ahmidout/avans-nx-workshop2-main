@@ -1,7 +1,7 @@
 import { IEnvironment } from './environment.interface';
 
 export const environment: IEnvironment = {
-  production: false,
+  production: true,
 
   ROOT_DOMAIN_URL: 'https://book-data-api.azurewebsites.net/',
   dataApiUrl: 'https://book-data-api.azurewebsites.net/api',
