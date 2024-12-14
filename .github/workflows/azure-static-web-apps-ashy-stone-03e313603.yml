@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
+          node-version: '18.x'
  
       - name: npm install, build, and test
         run: |
@@ -121,7 +121,7 @@ jobs:
       - name: Install dependencies
         run: npm install
  
-      - name: 'Deploy to Azure Web App'
+      - name: 'Deploy to Azure Web App.'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
