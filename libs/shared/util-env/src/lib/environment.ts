@@ -3,12 +3,12 @@ import { IEnvironment } from './environment.interface';
 export const environment: IEnvironment = {
   production: false,
 
-  ROOT_DOMAIN_URL: 'http://localhost:3000',
-  dataApiUrl: 'http://localhost:3000/api',
+  ROOT_DOMAIN_URL: 'https://book-data-api.azurewebsites.net/',
+  dataApiUrl: 'https://book-data-api.azurewebsites.net/api',
   rcmndApiUrl: 'http://localhost:3100/api',
 
-  // MONGO_DB_CONNECTION_STRING: 'mongodb+srv://admin:admin@cluster0.pkmgh.mongodb.net/BookDb?retryWrites=true&w=majority&appName=Cluster0',
-  MONGO_DB_CONNECTION_STRING: 'mongodb://localhost:27017/BookDb',
+  MONGO_DB_CONNECTION_STRING: 'mongodb+srv://admin:admin@cluster0.pkmgh.mongodb.net/BookDb?retryWrites=true&w=majority&appName=Cluster0',
+  // MONGO_DB_CONNECTION_STRING: 'mongodb://localhost:27017/BookDb',
   RCMND_NEO4J_DB_HOST: 'ea67c60d.databases.neo4j.io',
     RCMND_NEO4J_DB_PORT: 7687,
     RCMND_NEO4J_DB_USER: 'neo4j',

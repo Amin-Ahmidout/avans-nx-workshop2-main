@@ -16,7 +16,8 @@
         "tsConfig": "apps/rcmnd-api/tsconfig.app.json",
         "assets": ["apps/rcmnd-api/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/rcmnd-api/webpack.config.js"
+        "webpackConfig": "apps/rcmnd-api/webpack.config.js",
+        "generatePackageJson": true
       },
       "configurations": {
         "development": {},

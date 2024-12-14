@@ -95,3 +95,31 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.BOOK_DATA_API }}
           package: .
+  
+  deploy-backend-rcmnd-api:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+ 
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: data-api
+ 
+      - name: Unzip artifact for deployment
+        run: unzip data-api-release.zip
+ 
+      - name: Install dependencies
+        run: npm install
+ 
+      - name: 'Deploy to Azure Web App.'
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'book-data-api'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.PUBLISH_PROFILE_RCMND }}
+          package: .
