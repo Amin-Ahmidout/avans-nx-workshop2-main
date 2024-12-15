@@ -145,5 +145,25 @@ export class BookClubController {
         }
     }
 
-    
+    @Post(':id/join')
+    @UseGuards(AuthGuard)
+    async joinBookClub(
+        @Param('id') bookClubId: string,
+        @Request() req: any
+    ): Promise<BookClub> {
+        console.log('Received request to join book club');
+        console.log(`BookClub ID: ${bookClubId}`);
+        console.log(`Request Headers: ${JSON.stringify(req.headers)}`);
+
+        const userId = req.user?.user_id;
+        if (!userId) {
+            console.error('Authorization failed: No user ID found');
+            throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+        }
+
+        console.log(
+            `User ID: ${userId} is joining the book club ${bookClubId}`
+        );
+        return this.bookClubService.joinBookClub(bookClubId, userId);
+    }
 }
