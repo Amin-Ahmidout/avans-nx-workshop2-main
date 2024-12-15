@@ -29,11 +29,11 @@ export class BookClubController {
         return this.bookClubService.getBookClubs();
     }
 
-    @Get(':id')
-    async getOne(@Param('id') id: string): Promise<BookClub | null> {
-        this.logger.log(`Fetching book club with ID: ${id}`);
-        return this.bookClubService.getBookClubById(id);
-    }
+    // @Get(':id')
+    // async getOne(@Param('id') id: string): Promise<BookClub | null> {
+    //     this.logger.log(`Fetching book club with ID: ${id}`);
+    //     return this.bookClubService.getBookClubById(id);
+    // }
 
     @Post('')
     @UseGuards(AuthGuard)
