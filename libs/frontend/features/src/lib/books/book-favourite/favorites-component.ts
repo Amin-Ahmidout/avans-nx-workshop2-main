@@ -5,7 +5,7 @@ import { IBook } from '@avans-nx-workshop/shared/api';
 @Component({
     selector: 'app-favorites',
     templateUrl: './favorites-component.html',
-    styles: []
+    styleUrls: ['./favorites-component.css']
 })
 export class FavoritesComponent implements OnInit {
     favorites: IBook[] = [];

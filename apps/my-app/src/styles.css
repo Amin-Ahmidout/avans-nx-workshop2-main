@@ -1,5 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+/* Zorg dat de html en body de volledige hoogte van het scherm innemen */
+html, body {
+    height: 100%; /* Pagina neemt 100% hoogte in */
+    margin: 0; /* Verwijder standaardmarges */
+}
 
-.active {
-    font-style: bold;
+/* Gebruik Flexbox om de indeling te regelen */
+body {
+    display: flex; /* Flex-container maken */
+    flex-direction: column; /* Elementen verticaal stapelen */
+    min-height: 100vh; /* Minimale hoogte van de body = viewport-hoogte */
+}
+
+/* De hoofdinhoud neemt alle resterende ruimte in */
+main {
+    flex: 1; /* Neemt alle beschikbare ruimte in */
+}
+
+/* Footer blijft altijd aan de onderkant */
+footer {
+    background-color: #212529; /* Optioneel: kleur styling */
+    color: #fff; /* Optioneel: tekstkleur */
+    text-align: center;
+    padding: 10px 0; /* Ruimte binnen de footer */
 }

@@ -4,6 +4,7 @@ import { BookClubService } from "../bookclub.service";
 @Component({
     selector: 'app-book-club-list',
     templateUrl: './book-club-list.component.html',
+    styles: [''],
 })
 export class BookClubListComponent implements OnInit {
     bookClubs: any[] = [];
