@@ -1,7 +1,8 @@
 <div class="register-container d-flex justify-content-center align-items-center">
-    <div class="card p-4" style="width: 400px;margin-top: 10vh; margin-bottom: 10vh;">
+    <div class="card p-4" style="width: 400px; margin-top: 10vh; margin-bottom: 10vh;">
         <h3 class="text-center mb-4">Register</h3>
-        <form (ngSubmit)="register()">
+        <form #registerForm="ngForm" (ngSubmit)="register()">
+            <!-- Name Field -->
             <div class="form-group mb-3">
                 <input
                     id="name"
@@ -11,8 +12,14 @@
                     [(ngModel)]="registrationData.name"
                     name="name"
                     required
+                    minlength="2"
                 />
+                <div *ngIf="registerForm.controls['name']?.invalid && registerForm.controls['name']?.touched" class="text-danger mt-1">
+                    Name is required and must be at least 2 characters long.
+                </div>
             </div>
+
+            <!-- Email Field -->
             <div class="form-group mb-3">
                 <input
                     id="emailAddress"
@@ -22,8 +29,14 @@
                     [(ngModel)]="registrationData.emailAddress"
                     name="emailAddress"
                     required
+                    email
                 />
+                <div *ngIf="registerForm.controls['emailAddress']?.invalid && registerForm.controls['emailAddress']?.touched" class="text-danger mt-1">
+                    A valid email address is required.
+                </div>
             </div>
+
+            <!-- Password Field -->
             <div class="form-group mb-3">
                 <input
                     id="password"
@@ -33,13 +46,24 @@
                     [(ngModel)]="registrationData.password"
                     name="password"
                     required
+                    minlength="6"
                 />
+                <div *ngIf="registerForm.controls['password']?.invalid && registerForm.controls['password']?.touched" class="text-danger mt-1">
+                    Password is required and must be at least 6 characters long.
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary w-100 mb-3">Register</button>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary w-100 mb-3" [disabled]="registerForm.invalid">
+                Register
+            </button>
+
             <div class="text-center">
                 <a routerLink="/login" class="text-decoration-none">Already have an account? Login</a>
             </div>
         </form>
+
+        <!-- Error Message -->
         <div *ngIf="errorMessage" class="error-message text-danger mt-3 text-center">
             {{ errorMessage }}
         </div>
