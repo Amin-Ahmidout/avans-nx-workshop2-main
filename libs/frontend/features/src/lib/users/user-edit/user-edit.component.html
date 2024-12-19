@@ -1,8 +1,13 @@
 <div class="container mt-4">
   <h1 class="mb-4">Edit User</h1>
   <form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="submitForm()">
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Name Field -->
     <div class="mb-3">
-      <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
       <label for="name" class="form-label">Name</label>
       <input
         type="text"
@@ -12,7 +17,12 @@
         placeholder="Enter your name"
         required
       />
+      <div *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched" class="text-danger mt-1">
+        Name is required.
+      </div>
     </div>
+
+    <!-- Email Field -->
     <div class="mb-3">
       <label for="emailAddress" class="form-label">Email</label>
       <input
@@ -23,7 +33,12 @@
         placeholder="Enter your email"
         required
       />
+      <div *ngIf="userForm.get('emailAddress')?.invalid && userForm.get('emailAddress')?.touched" class="text-danger mt-1">
+        A valid email address is required.
+      </div>
     </div>
+
+    <!-- Role Field -->
     <div class="mb-3">
       <label for="role" class="form-label">Role</label>
       <select id="role" formControlName="role" class="form-select" required>
@@ -31,7 +46,12 @@
         <option value="Admin">Admin</option>
         <option value="Guest">Guest</option>
       </select>
+      <div *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched" class="text-danger mt-1">
+        Role is required.
+      </div>
     </div>
+
+    <!-- Gender Field -->
     <div class="mb-3">
       <label for="gender" class="form-label">Gender</label>
       <select id="gender" formControlName="gender" class="form-select" required>
@@ -39,7 +59,12 @@
         <option value="Male">Male</option>
         <option value="Female">Female</option>
       </select>
+      <div *ngIf="userForm.get('gender')?.invalid && userForm.get('gender')?.touched" class="text-danger mt-1">
+        Gender is required.
+      </div>
     </div>
+
+    <!-- IsActive Checkbox -->
     <div class="form-check mb-3">
       <input
         type="checkbox"
@@ -49,10 +74,30 @@
       />
       <label for="isActive" class="form-check-label">Active</label>
     </div>
+
+    <!-- Action Buttons -->
     <div class="d-flex justify-content-end">
-      <button type="submit" class="btn btn-primary me-2">Save Changes</button>
-      <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
-      <button type="button" class="btn btn-danger" (click)="deleteUser()">Delete</button>
+      <button
+        type="submit"
+        class="btn btn-primary me-2"
+        [disabled]="userForm.invalid"
+      >
+        Save Changes
+      </button>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="deleteUser()"
+      >
+        Delete
+      </button>
     </div>
   </form>
 </div>
