@@ -9,7 +9,10 @@
     <!-- Ledenlijst -->
     <div class="members-section">
         <h3 class="section-title">Members</h3>
-        <ul *ngIf="bookClub?.members?.length > 0; else noMembers" class="members-list">
+        <ul
+            *ngIf="bookClub?.members?.length > 0; else noMembers"
+            class="members-list"
+        >
             <li *ngFor="let member of bookClub.members" class="member-item">
                 {{ member.name }}
             </li>
@@ -24,8 +27,14 @@
     <!-- Boekenlijst -->
     <div class="books-section">
         <h3 class="section-title">Books in this Club</h3>
-        <ul *ngIf="bookClub?.books?.length > 0; else noBooks" class="books-list">
-            <li *ngFor="let book of bookClub.books" class="book-item d-flex justify-content-between align-items-center">
+        <ul
+            *ngIf="bookClub?.books?.length > 0; else noBooks"
+            class="books-list"
+        >
+            <li
+                *ngFor="let book of bookClub.books"
+                class="book-item d-flex justify-content-between align-items-center"
+            >
                 <span>{{ book.title }} by {{ book.author }}</span>
                 <!-- Verwijder-knop alleen zichtbaar voor de eigenaar -->
                 <button
@@ -50,7 +59,9 @@
         <h3 class="section-title">Add a Book</h3>
         <form (ngSubmit)="addBookToClub()" class="add-book-form">
             <div class="mb-3">
-                <label for="availableBooks" class="form-label">Select a Book</label>
+                <label for="availableBooks" class="form-label"
+                    >Select a Book</label
+                >
                 <select
                     [(ngModel)]="selectedBookId"
                     name="availableBooks"
@@ -58,7 +69,10 @@
                     class="form-select"
                     required
                 >
-                    <option *ngFor="let book of availableBooks" [value]="book.id">
+                    <option
+                        *ngFor="let book of availableBooks"
+                        [value]="book.id"
+                    >
                         {{ book.title }} by {{ book.author }}
                     </option>
                 </select>
@@ -69,31 +83,54 @@
 
     <hr />
 
-    <!-- Bookclub bewerken -->
-    <div *ngIf="isOwner(bookClub?.owner?._id)" class="edit-club-section">
-        <h3 class="section-title">Edit Book Club</h3>
-        <form (ngSubmit)="editBookClub()" class="edit-club-form">
-            <div class="mb-3">
-                <label for="clubName" class="form-label">Book Club Name</label>
-                <input
-                    [(ngModel)]="bookClub.name"
-                    name="clubName"
-                    id="clubName"
-                    class="form-control"
-                    required
-                />
+ <!-- Bookclub bewerken -->
+<div *ngIf="isOwner(bookClub?.owner?._id)" class="edit-club-section">
+    <h3 class="section-title">Edit Book Club</h3>
+    <form (ngSubmit)="editBookClub()" class="edit-club-form">
+        <div class="mb-3">
+            <label for="clubName" class="form-label">Book Club Name</label>
+            <input
+                [(ngModel)]="bookClub.name"
+                name="clubName"
+                id="clubName"
+                class="form-control"
+                required
+            />
+            <!-- Foutmelding voor lege naam -->
+            <div 
+                *ngIf="!bookClub?.name?.trim()" 
+                class="text-danger mt-1"
+            >
+                Book Club Name is required.
             </div>
-            <div class="mb-3">
-                <label for="clubDescription" class="form-label">Description</label>
-                <textarea
-                    [(ngModel)]="bookClub.description"
-                    name="clubDescription"
-                    id="clubDescription"
-                    class="form-control"
-                    required
-                ></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="clubDescription" class="form-label">Description</label>
+            <textarea
+                [(ngModel)]="bookClub.description"
+                name="clubDescription"
+                id="clubDescription"
+                class="form-control"
+                required
+            ></textarea>
+            <!-- Foutmelding voor lege beschrijving -->
+            <div 
+                *ngIf="!bookClub?.description?.trim()" 
+                class="text-danger mt-1"
+            >
+                Description is required.
             </div>
-            <button type="submit" class="btn btn-warning">Save Changes</button>
-        </form>
-    </div>
+        </div>
+
+        <button
+            type="submit"
+            class="btn btn-warning"
+            [disabled]="!bookClub?.name?.trim() || !bookClub?.description?.trim()"
+        >
+            Save Changes
+        </button>
+    </form>
+</div>
+
 </div>
